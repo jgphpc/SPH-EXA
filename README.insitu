@@ -17,4 +17,3 @@ build with ASCENT on Piz Daint:
   mkdir buildAscentDaint
   cd buildAscentDaint
   cmake -C /users/jfavre/Projects/Ascent/daint106.cmake -DCMAKE_CXX_COMPILER=CC -DINSITU=Ascent ..
-  
