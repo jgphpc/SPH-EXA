@@ -17,6 +17,7 @@
 
 #include "propagator.hpp"
 #include "insitu_viz.h"
+#include "profiling.hpp"
 
 using namespace cstone;
 using namespace sphexa;
@@ -86,8 +87,10 @@ int main(int argc, char** argv)
 
     if (d.rank == 0) std::cout << "Domain synchronized, nLocalParticles " << d.x.size() << std::endl;
 
+    MARK_BEGIN("01_init")
     viz::init_catalyst(argc, argv);
     viz::init_ascent(d, domain.startIndex());
+    MARK_END
 
     const size_t nTasks = 64;
     const size_t ngmax  = 150;
@@ -117,13 +120,17 @@ int main(int argc, char** argv)
             #endif
         }
 
+        MARK_BEGIN("15_output")
         if (d.iteration % 5 == 0) { viz::execute(d, domain.startIndex(), domain.endIndex()); }
+        MARK_END
     }
 
     totalTimer.step("Total execution time of " + std::to_string(maxStep) + " iterations of Sedov");
 
     constantsFile.close();
+    MARK_BEGIN("16_Finalize")
     viz::finalize();
+    MARK_END
     return exitSuccess();
 }
 
