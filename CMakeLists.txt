@@ -1,15 +1,17 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(sphexa CXX C)
+project(sphexa CXX)
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-math-errno -march=native -DNDEBUG")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-math-errno -march=native -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CUDA_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 option(BUILD_TESTING "build unit and integration tests" ON)
 option(BUILD_ANALYTICAL "build analytical solution" ON)
 option(SPH_EXA_WITH_HIP "Build SPH-EXA with HIP" OFF)
-option(USE_PROFILING "Build sedov with profiling" OFF)
+option(USE_PROFILING_SCOREP "Build sedov for profiling with scorep" OFF)
+option(USE_PROFILING_NVTX "Build sedov for profiling with nsight-systems" OFF)
 
 if (SPH_EXA_WITH_HIP)
     cmake_minimum_required(VERSION 3.21)
