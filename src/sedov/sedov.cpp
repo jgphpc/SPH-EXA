@@ -51,7 +51,9 @@ int main(int argc, char** argv)
 
     const IFileWriter<Dataset>& fileWriter = SedovMPIFileWriter<Dataset>();
 
+    //MARK_BEGIN("00_init")
     auto d = SedovDataGenerator<Real, KeyType>::generate(cubeSide);
+    //MARK_END
 
     if (d.rank == 0) std::cout << "Data generated." << std::endl;
 
@@ -64,6 +66,7 @@ int main(int argc, char** argv)
     size_t bucketSize = std::max(bucketSizeFocus, d.n / (100 * d.nrank));
 
     Box<Real> box(0, 1);
+    MARK_BEGIN("00_box")
     box = makeGlobalBox(d.x.begin(), d.x.end(), d.y.begin(), d.z.begin(), box);
 
     // enable PBC and enlarge bounds
@@ -71,23 +74,28 @@ int main(int argc, char** argv)
     box = Box<Real>(box.xmin() - dx, box.xmax() + dx,
                     box.ymin() - dx, box.ymax() + dx,
                     box.zmin() - dx, box.zmax() + dx, true, true, true);
+    MARK_END
 
     float theta = 1.0;
 
+    //no: MARK_BEGIN("00_domain")
     #ifdef USE_CUDA
     Domain<KeyType, Real, CudaTag> domain(rank, d.nrank, bucketSize, bucketSizeFocus, theta, box);
     #else
     Domain<KeyType, Real> domain(rank, d.nrank, bucketSize, bucketSizeFocus, theta, box);
     #endif
+    //MARK_END
 
     if (d.rank == 0) std::cout << "Domain created." << std::endl;
 
+    MARK_BEGIN("00_domain.sync")
     domain.sync(
         d.codes, d.x, d.y, d.z, d.h, d.m, d.mui, d.u, d.vx, d.vy, d.vz, d.x_m1, d.y_m1, d.z_m1, d.du_m1, d.dt_m1);
 
     if (d.rank == 0) std::cout << "Domain synchronized, nLocalParticles " << d.x.size() << std::endl;
+    MARK_END
 
-    MARK_BEGIN("01_init")
+    MARK_BEGIN("00_visu_init")
     viz::init_catalyst(argc, argv);
     viz::init_ascent(d, domain.startIndex());
     MARK_END
@@ -120,7 +128,7 @@ int main(int argc, char** argv)
             #endif
         }
 
-        MARK_BEGIN("15_output")
+        MARK_BEGIN("15_visu_output")
         if (d.iteration % 5 == 0) { viz::execute(d, domain.startIndex(), domain.endIndex()); }
         MARK_END
     }
@@ -128,7 +136,7 @@ int main(int argc, char** argv)
     totalTimer.step("Total execution time of " + std::to_string(maxStep) + " iterations of Sedov");
 
     constantsFile.close();
-    MARK_BEGIN("16_Finalize")
+    MARK_BEGIN("16_visu_finalize")
     viz::finalize();
     MARK_END
     return exitSuccess();

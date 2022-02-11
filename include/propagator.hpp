@@ -65,13 +65,13 @@ public:
 
         timer.start();
 
-        MARK_BEGIN("02_domain.sync")
+        MARK_BEGIN("01_domain.sync")
         domain.sync(
             d.codes, d.x, d.y, d.z, d.h, d.m, d.mui, d.u, d.vx, d.vy, d.vz, d.x_m1, d.y_m1, d.z_m1, d.du_m1, d.dt_m1);
         timer.step("domain::sync");
         MARK_END
 
-        MARK_BEGIN("03_updateTasks")
+        MARK_BEGIN("02_updateTasks")
         d.resize(domain.nParticlesWithHalos());
         std::fill(begin(d.m), begin(d.m) + domain.startIndex(), d.m[domain.startIndex()]);
         std::fill(begin(d.m) + domain.endIndex(), begin(d.m) + domain.nParticlesWithHalos(), d.m[domain.startIndex()]);
@@ -79,65 +79,67 @@ public:
         timer.step("updateTasks");
         MARK_END
 
-        MARK_BEGIN("04_FindNeighbors")
+        MARK_BEGIN("03_FindNeighbors")
         findNeighborsSfc(taskList.tasks, d.x, d.y, d.z, d.h, d.codes, domain.box());
         timer.step("FindNeighbors");
         MARK_END
 
-        MARK_BEGIN("05_computeDensity")
+        MARK_BEGIN("04_computeDensity")
         computeDensity<T>(taskList.tasks, d, domain.box());
         timer.step("Density");
         MARK_END
 
-        MARK_BEGIN("06_EquationOfState")
+        MARK_BEGIN("05_EquationOfState")
         computeEquationOfStateEvrard<T>(taskList.tasks, d);
         timer.step("EquationOfState");
         MARK_END
 
-        MARK_BEGIN("07_synchronizeHalos1")
+        MARK_BEGIN("06_synchronizeHalos1")
         domain.exchangeHalos(d.vx, d.vy, d.vz, d.ro, d.p, d.c);
         timer.step("mpi::synchronizeHalos");
         MARK_END
 
-        MARK_BEGIN("08_IAD")
+        MARK_BEGIN("07_IAD")
         computeIAD<T>(taskList.tasks, d, domain.box());
         timer.step("IAD");
         MARK_END
 
-        MARK_BEGIN("09_synchronizeHalos2")
+        MARK_BEGIN("08_synchronizeHalos2")
         domain.exchangeHalos(d.c11, d.c12, d.c13, d.c22, d.c23, d.c33);
         timer.step("mpi::synchronizeHalos");
         MARK_END
 
-        MARK_BEGIN("10_MomentumEnergyIAD")
+        MARK_BEGIN("09_MomentumEnergyIAD")
         computeMomentumAndEnergyIAD<T>(taskList.tasks, d, domain.box());
         timer.step("MomentumEnergyIAD");
         MARK_END
 
-        MARK_BEGIN("11_Timestep")
+        MARK_BEGIN("10_Timestep")
         computeTimestep<T, TimestepPress2ndOrder<T, ParticleDataType>>(taskList.tasks, d);
         timer.step("Timestep");
         MARK_END
 
-        MARK_BEGIN("12_UpdateQuantities")
+        MARK_BEGIN("11_UpdateQuantities")
         computePositions<T, computeAcceleration<T, ParticleDataType>>(taskList.tasks, d, domain.box());
         timer.step("UpdateQuantities");
         MARK_END
 
-        MARK_BEGIN("13_EnergyConservation")
+        MARK_BEGIN("12_EnergyConservation")
         computeTotalEnergy<T>(taskList.tasks, d);
         d.etot += d.egrav;
         timer.step("EnergyConservation");
         MARK_END
 
-        MARK_BEGIN("14_UpdateSmoothingLength")
+        MARK_BEGIN("13_UpdateSmoothingLength")
         updateSmoothingLength<T>(taskList.tasks, d);
         timer.step("UpdateSmoothingLength");
         MARK_END
 
         timer.stop();
 
+        MARK_BEGIN("14_printIterationTimings")
         printIterationTimings(domain, d);
+        MARK_END
     }
 
     template<class DomainType, class ParticleDataType>
