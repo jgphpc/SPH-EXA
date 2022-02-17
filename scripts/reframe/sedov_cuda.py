@@ -21,10 +21,17 @@ class sedov_cuda(rfm.RunOnlyRegressionTest):
     # use_tool = parameter(['Score-P/7.1-CrayNvidia-21.09'])
     # use_tool = parameter(['Score-P'])
     use_tool = parameter(['notool'])
-    compute_nodes = parameter([1, 2, 4])
-    np_per_c = parameter([45e5]) # OK <------------- -n572 = 187'149'248/2gpu
+    mypath = variable(str, value='.')
+    compute_nodes = parameter([1])
+    # compute_nodes = parameter([1, 2, 4, 8, 16])
+    # np_per_c = parameter([5.34e6]) #ko 6.4e6
+    # sk wants 5.34e6 ok 6.0e6, 6.2e6 does not scale
+    # ---- wombat
+    # compute_nodes = parameter([1, 2, 4])
+    # np_per_c = parameter([45e5]) # OK <------------- -n572 = 187'149'248/2gpu
     #donotscale np_per_c = parameter([47e5]) # OK <------------- -n572 = 187'149'248/2gpu
     # 47e5 ok  / 48e5 ko
+    # ----
     # np_per_c = variable(int)
     # compute_nodes = parameter([1, 2, 4, 8])
     # np_per_c = parameter([4.0e6, 6.0e6])
@@ -37,10 +44,10 @@ class sedov_cuda(rfm.RunOnlyRegressionTest):
     # noinsitu oom: 6.4e6    
     # 2 24-core AMD EPYC Rome 7402 CPUs (each with 512GB DDR memory) and
     # 4 NVIDIA Ampere A100 GPUs (each with 40GB HBM2e), with
-    steps = parameter([10])
+    steps = parameter([10]) # 10
     # insitu = parameter(['none', 'Catalyst'])
-    valid_systems = ['wombat:gpu']
-    valid_prog_environs = ['builtin', 'PrgEnv-gnu', 'PrgEnv-arm'] #, 'PrgEnv-cray', 'PrgEnv-gnu', 'PrgEnv-intel', 'PrgEnv-nvidia']
+    valid_systems = ['wombat:gpu', 'dom:gpu']
+    valid_prog_environs = ['builtin', 'PrgEnv-gnu', 'PrgEnv-arm', 'PrgEnv-nvidia']
     # modules = ['gcc/10.3.0', 'Score-P/7.1-CrayNvidia-21.09'] # , 'gcc/9.3.0']
     # modules = ['Nsight-Systems/2022.1.1', 'Nsight-Compute/2022.1.0']
     # sedov-cuda': corrupted double-linked list: 0x000000000084f570 ***
@@ -54,68 +61,78 @@ class sedov_cuda(rfm.RunOnlyRegressionTest):
     # executable = variable(str, value='$HOME/sedov-cuda')
 
     #{{{ compile
-    @run_before('compile')
-    def set_compile(self):
-        self.build_system = 'CMake'
-        self.prebuild_cmds = [
-            'module list',
-            'rm -fr docs LICENSE Makefile README.hdf5 README.insitu README.md',
-            'rm -fr scripts test tools',
-        ]
-        if self.current_environ.name in ['PrgEnv-nvidia', 'builtin']:
-            self.prebuild_cmds += [
-                'sed -i "s@-fno-math-errno@@" CMakeLists.txt',
-                # 'unset CPATH'
-            ]
-
-        self.build_system.builddir = 'build'
-        # self.executable = f'{self.build_system.builddir}/src/evrard/evrard'
-        # self.executable = f'{self.build_system.builddir}/src/sedov/sedov-cuda'
-        # self.executable = '/p/scratch/training2123/piccinali1/stage/juwels-booster/gpu/builtin/sedov-cuda'
-        # self.executable = '/p/home/jusers/piccinali1/juwels/sedov-cuda'
-        # self.executable = '/p/home/jusers/piccinali1/juwels/sedov-cuda+nvtx'
-        self.executable = '$HOME/sedov-cuda'
-        self.executable_name = self.executable.split("/")[-1]
-        self.build_system.config_opts = [
-            # '-DCMAKE_CXX_COMPILER=mpicxx',
-            # '-DCMAKE_CUDA_COMPILER=',
-            '-DBUILD_TESTING=OFF',
-            '-DBUILD_ANALYTICAL=OFF',
-            '-DSPH_EXA_WITH_HIP=OFF',
-            '-DBUILD_RYOANJI=OFF',
-            '-DCMAKE_BUILD_TYPE=Release',
-            '-DCMAKE_CUDA_FLAGS="-arch=sm_80 -ccbin mpicxx -DNDEBUG -std=c++17"',
-            # '-DCMAKE_BUILD_TYPE=Release',
-            # -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CUDA_COMPILER=nvcc -DBUILD_TESTING=OFF -DBUILD_ANALYTICAL=OFF -DSPH_EXA_WITH_HIP=OFF
-            # -DBUILD_RYOANJI=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_FLAGS="-arch=sm_80 -ccbin mpicxx -DNDEBUG -std=c++17" -DUSE_PROFILING=ON
-        ]
-
-        if self.use_tool:
-            self.build_system.config_opts += ['-DUSE_PROFILING=ON']
-        else:
-            self.build_system.config_opts += ['-DUSE_PROFILING=OFF']
-
-        self.build_system.make_opts = [
-            self.executable_name,
-            # VERBOSE=1,
-        ]
-        self.build_system.max_concurrency = 10
-        # self.postbuild_cmds = []
+#     @run_before('compile')
+#     def set_compile(self):
+#         self.build_system = 'CMake'
+#         self.prebuild_cmds = [
+#             'module list',
+#             'rm -fr docs LICENSE Makefile README.hdf5 README.insitu README.md',
+#             'rm -fr scripts test tools',
+#         ]
+#         if self.current_environ.name in ['PrgEnv-nvidia', 'builtin']:
+#             self.prebuild_cmds += [
+#                 'sed -i "s@-fno-math-errno@@" CMakeLists.txt',
+#                 # 'unset CPATH'
+#             ]
+# 
+#         self.build_system.builddir = 'build'
+#         # self.executable = f'{self.build_system.builddir}/src/evrard/evrard'
+#         # self.executable = f'{self.build_system.builddir}/src/sedov/sedov-cuda'
+#         # self.executable = '/p/scratch/training2123/piccinali1/stage/juwels-booster/gpu/builtin/sedov-cuda'
+#         # self.executable = '/p/home/jusers/piccinali1/juwels/sedov-cuda'
+#         # self.executable = '/p/home/jusers/piccinali1/juwels/sedov-cuda+nvtx'
+#         # self.executable = '$HOME/sedov-cuda'
+#         self.executable = f'{self.mypath}/sedov-cuda'
+#         self.executable_name = self.executable.split("/")[-1]
+#         self.build_system.config_opts = [
+#             # '-DCMAKE_CXX_COMPILER=mpicxx',
+#             # '-DCMAKE_CUDA_COMPILER=',
+#             '-DBUILD_TESTING=OFF',
+#             '-DBUILD_ANALYTICAL=OFF',
+#             '-DSPH_EXA_WITH_HIP=OFF',
+#             '-DBUILD_RYOANJI=OFF',
+#             '-DCMAKE_BUILD_TYPE=Release',
+#             '-DCMAKE_CUDA_FLAGS="-arch=sm_80 -ccbin mpicxx -DNDEBUG -std=c++17"',
+#             # '-DCMAKE_BUILD_TYPE=Release',
+#             # -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CUDA_COMPILER=nvcc -DBUILD_TESTING=OFF -DBUILD_ANALYTICAL=OFF -DSPH_EXA_WITH_HIP=OFF
+#             # -DBUILD_RYOANJI=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_FLAGS="-arch=sm_80 -ccbin mpicxx -DNDEBUG -std=c++17" -DUSE_PROFILING=ON
+#         ]
+# 
+#         if self.use_tool:
+#             self.build_system.config_opts += ['-DUSE_PROFILING=ON']
+#         else:
+#             self.build_system.config_opts += ['-DUSE_PROFILING=OFF']
+# 
+#         self.build_system.make_opts = [
+#             self.executable_name,
+#             # VERBOSE=1,
+#         ]
+#         self.build_system.max_concurrency = 10
+#         # self.postbuild_cmds = []
     #}}}
 
     #{{{ run
     @run_before('run')
     def set_run(self):
-        self.executable = '$HOME/sedov-cuda'
+        # self.executable = '$HOME/sedov-cuda'
+        self.executable = f'{self.mypath}/sedov-cuda'
         # self.num_tasks = 9
         # self.job.launcher =
         # LauncherWrapper(self.job.launcher, 'time', ['-p'])
         # @run_before('performance')
         self.skip_if_no_procinfo()
         procinfo = self.current_partition.processor.info
-        self.num_tasks_per_node = 2
-        self.num_tasks = self.compute_nodes * self.num_tasks_per_node
-        self.num_cpus_per_task = 20
+        if self.current_system.name in ['dom']:
+            self.num_tasks_per_node = 1
+            self.num_tasks = self.compute_nodes * self.num_tasks_per_node
+            self.num_cpus_per_task = 12
+            self.np_per_c = 5.34e6 # 64e6 per cn
+        elif self.current_system.name in ['wombat']:
+            self.num_tasks_per_node = 2
+            self.num_tasks = self.compute_nodes * self.num_tasks_per_node
+            self.num_cpus_per_task = 20
+            self.np_per_c = 32.1e5 # 64e6 per cn
+
         # self.num_tasks = self.compute_nodes * self.num_tasks_per_node
         #no! self.num_tasks_per_core = 1
         # --cpus-per-task=<ncpus> = -c = openmp threads
