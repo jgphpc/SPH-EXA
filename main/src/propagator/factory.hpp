@@ -35,7 +35,9 @@
 #include <variant>
 
 #include "ipropagator.hpp"
+#ifndef __HIPCC__
 #include "std_hydro.hpp"
+#endif
 #include "ve_hydro.hpp"
 
 namespace sphexa
@@ -49,10 +51,12 @@ propagatorFactory(const std::string& choice, size_t ngmax, size_t ng0, std::ostr
     {
         return std::make_unique<HydroVeProp<DomainType, ParticleDataType>>(ngmax, ng0, output, rank);
     }
+#ifndef __HIPCC__
     else if (choice == "std")
     {
         return std::make_unique<HydroProp<DomainType, ParticleDataType>>(ngmax, ng0, output, rank);
     }
+#endif
     else { throw std::runtime_error("Unknown propagator choice: " + choice); }
 }
 

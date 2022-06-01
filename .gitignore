@@ -23,6 +23,7 @@ test/constants.txt
 # Precompiled Headers
 *.gch
 *.pch
+*.prehip
 
 # Compiled Dynamic libraries
 *.so
@@ -43,3 +44,4 @@ test/constants.txt
 *.exe
 *.out
 *.app
+

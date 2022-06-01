@@ -8,9 +8,12 @@
 #include "sph/total_energy.hpp"
 #include "sph/update_h.hpp"
 
+// tmp workaround for hipcc
+#ifndef __HIPCC__
 #include "sph/hydro_std/density.hpp"
 #include "sph/hydro_std/iad.hpp"
 #include "sph/hydro_std/momentum_energy.hpp"
+#endif
 
 #include "sph/hydro_ve/av_switches.hpp"
 #include "sph/hydro_ve/ve_def_gradh.hpp"

@@ -1,4 +1,6 @@
-add_subdirectory(hydro_std)
+if(NOT CMAKE_HIP_COMPILER)
+    add_subdirectory(hydro_std)
+endif()
 add_subdirectory(hydro_ve)
 
 if(CMAKE_HIP_COMPILER)
@@ -6,7 +8,13 @@ if(CMAKE_HIP_COMPILER)
 endif()
 
 if(CMAKE_CUDA_COMPILER OR CMAKE_HIP_COMPILER)
-    add_library(sph_gpu $<TARGET_OBJECTS:hydro_std_gpu> $<TARGET_OBJECTS:hydro_ve_gpu> particles_data_gpu.cu)
+    if(NOT CMAKE_HIP_COMPILER)
+        add_library(sph_gpu $<TARGET_OBJECTS:hydro_std_gpu> $<TARGET_OBJECTS:hydro_ve_gpu> particles_data_gpu.cu)
+    elseif(CMAKE_HIP_COMPILER)
+        # tmp workaround for hipcc
+        add_library(sph_gpu                                 $<TARGET_OBJECTS:hydro_ve_gpu> particles_data_gpu.cu)
+        set_property(TARGET sph_gpu PROPERTY HIP_ARCHITECTURES gfx908)
+    endif()
     target_include_directories(sph_gpu PUBLIC ${CSTONE_DIR} ${PROJECT_SOURCE_DIR}/include)
     set_target_properties(sph_gpu PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 endif()

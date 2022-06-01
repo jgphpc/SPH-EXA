@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * MIT License
  *
@@ -28,6 +29,10 @@
  *
  * @author Sebastian Keller <sebastian.f.keller@gmail.com>
  */
+
+#ifdef __HIPCC__
+#include "hipcub/hipcub.hpp"
+#endif
 
 #include "cstone/cuda/findneighbors.cuh"
 

@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * MIT License
  *
@@ -29,6 +30,9 @@
  * @author Sebastian Keller <sebastian.f.keller@gmail.com>
  */
 
+#ifdef __HIPCC__
+#include "hipcub/hipcub.hpp"
+#endif
 #include "sph/sph.cuh"
 #include "sph/particles_data.hpp"
 #include "sph/util/cuda_utils.cuh"

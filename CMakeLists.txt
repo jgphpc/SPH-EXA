@@ -64,7 +64,7 @@ if(HIP_FOUND)
     # find_package(HIP)
     if(CMAKE_HIP_COMPILER)
         enable_language(HIP)
-        set(CMAKE_HIP_FLAGS "-fPIC -fgpu-rdc -w")
+        set(CMAKE_HIP_FLAGS "-fPIC -fgpu-rdc -w -I${HIP_PATH}/include --gcc-toolchain=$ENV{GCC_X86_64}")
     endif()
 endif()
 # }}}
