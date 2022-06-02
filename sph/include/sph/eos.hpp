@@ -102,14 +102,14 @@ void computeEOS(size_t startIndex, size_t endIndex, Dataset& d)
 #pragma omp parallel for schedule(static)
     for (size_t i = startIndex; i < endIndex; ++i)
     {
-        auto rho             = kx[i] * m[i] / xm[i];
+        auto rho = kx[i] * m[i] / xm[i];
 #ifdef __HIPCC__
-        auto [pi_, ci_] = idealGasEOS(u[i], rho);
+        auto [pi_, ci_]      = idealGasEOS(u[i], rho);
         std::tie(p[i], c[i]) = {pi_, ci_};
 #else
         std::tie(p[i], c[i]) = idealGasEOS(u[i], rho);
 #endif
-        prho[i]              = p[i] / (kx[i] * m[i] * m[i] * gradh[i]);
+        prho[i] = p[i] / (kx[i] * m[i] * m[i] * gradh[i]);
         if (storeRho) { d.rho[i] = rho; }
     }
 }
@@ -165,7 +165,7 @@ void computeEOS_HydroStd(size_t startIndex, size_t endIndex, Dataset& d)
 #ifdef __HIPCC__
         std::tie(p[i], c[i]) = idealGasEOS(u[i], rho[i]);
 #else
-        auto [pi_, ci_] = idealGasEOS(u[i], rho[i]);
+        auto [pi_, ci_]      = idealGasEOS(u[i], rho[i]);
         std::tie(p[i], c[i]) = {pi_, ci_};
 #endif
     }
