@@ -90,7 +90,7 @@ jobs:
       run: |
         ls -la
         pwd
-        scripts/build.sh
+        .github/workflows/scripts/build.sh
         # cmake -B build_ -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{env.CXX}}
     # }}}
 
