@@ -30,7 +30,9 @@ ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
 cd /usr/local/games/ 
 PATH="$PATH:/usr/local/games/cuda/bin" \
 CPATH="$CPATH:/usr/include:/usr/lib/x86_64-linux-gnu/openmpi/include" \
-   cmake -GNinja -S SPH-EXA.git -B build \
+   cmake -GNinja \
+   -S /home/runner/work/SPH-EXA/SPH-EXA \
+   -B /usr/local/games/cuda/build \
    -DGPU_DIRECT=OFF \
    -DBUILD_ANALYTICAL=OFF \
    -DBUILD_TESTING=OFF \
