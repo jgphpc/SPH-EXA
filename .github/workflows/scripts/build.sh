@@ -15,7 +15,7 @@ DEBIAN_FRONTEND=noninteractive sudo \
 sudo apt clean autoremove
 
 
-mkdir -p /usr/local/games/cuda
+sudo mkdir -p /usr/local/games/cuda
 sudo chmod 777 /usr/local/games/cuda
 wget --quiet --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
