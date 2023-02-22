@@ -21,6 +21,7 @@ sudo chmod 777 /usr/local/games/cuda
 wget --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
+mv *.tar.xz /usr/local/games/
 tar --strip-components 1 -C /usr/local/games/cuda -xf /usr/local/games/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
 tar --strip-components 1 -C /usr/local/games/cuda -xf /usr/local/games/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
 ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
