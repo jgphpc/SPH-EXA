@@ -17,7 +17,8 @@ sudo apt clean autoremove
 
 sudo mkdir -p /usr/local/games/cuda
 sudo chmod 777 /usr/local/games/cuda
-wget --quiet --no-check-certificate \
+# wget --no-check-certificate
+wget --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
 tar --strip-components 1 -C /usr/local/games/cuda -xf /usr/local/games/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
