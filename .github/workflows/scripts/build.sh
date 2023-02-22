@@ -2,29 +2,30 @@ TZ=Europe/Zurich
 # TODO: ccache
 # xz-utils -> = deps for tar
 # && sed -i 's@archive.ubuntu.com@ubuntu.ethz.ch@' /etc/apt/sources.list \
-mkdir -p cuda
+sudo mkdir -p cuda
 ls -la ; pwd    
-apt update --quiet
-apt upgrade -y --quiet 
-DEBIAN_FRONTEND=noninteractive \
+sudo apt update --quiet
+sudo apt upgrade -y --quiet 
+DEBIAN_FRONTEND=noninteractive sudo \
    apt install -y --no-install-recommends \
    wget xz-utils unzip \
    cmake ninja-build \
    g++ libopenmpi-dev \
    nvidia-cuda-dev libcub-dev libthrust-dev libcublas11
-apt clean autoremove
+sudo apt clean autoremove
 
 
+cd /usr/local/games/
 wget --quiet --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
-tar --strip-components 1 -C cuda -xf cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
-tar --strip-components 1 -C cuda -xf cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
-cd cuda ; ln -s lib/ lib64
+sudo tar --strip-components 1 -C /cuda -xf cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
+sudo tar --strip-components 1 -C /cuda -xf cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
+sudo ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
 
 
 cd /usr/local/games/ 
-PATH="$PATH:/cuda/bin" \
+PATH="$PATH:/usr/local/games/cuda/bin" \
 CPATH="$CPATH:/usr/include:/usr/lib/x86_64-linux-gnu/openmpi/include" \
    cmake -GNinja -S SPH-EXA.git -B build \
    -DGPU_DIRECT=OFF \
