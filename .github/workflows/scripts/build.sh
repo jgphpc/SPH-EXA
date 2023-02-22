@@ -15,13 +15,14 @@ DEBIAN_FRONTEND=noninteractive sudo \
 sudo apt clean autoremove
 
 
-cd /usr/local/games/
+mkdir -p /usr/local/games/cuda
+sudo chmod 777 /usr/local/games/cuda
 wget --quiet --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
-sudo tar --strip-components 1 -C /cuda -xf cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
-sudo tar --strip-components 1 -C /cuda -xf cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
-sudo ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
+tar --strip-components 1 -C /usr/local/games/cuda -xf /usr/local/games/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
+tar --strip-components 1 -C /usr/local/games/cuda -xf /usr/local/games/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
+ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
 
 
 cd /usr/local/games/ 
