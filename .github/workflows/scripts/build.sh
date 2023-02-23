@@ -44,9 +44,10 @@ CPATH="$CPATH:/usr/include:/usr/lib/x86_64-linux-gnu/openmpi/include" \
    -DCMAKE_CUDA_COMPILER=nvcc \
    -DCMAKE_CUDA_ARCHITECTURES=80
 #
-cmake --build /usr/local/games/cuda/build \
+cmake \
+    --build /usr/local/games/cuda/build \
     -t sphexa-cuda \
-    `grep processor /proc/cpuinfo | wc -l`
+    -j `grep processor /proc/cpuinfo | wc -l`
 ls -l ./build/main/src/sphexa/sphexa-cuda
 
 # -> ./build/main/src/sphexa/sphexa-cuda
