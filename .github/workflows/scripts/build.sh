@@ -51,7 +51,7 @@ cmake \
 #    -t sphexa-cuda -j 4
 #    -j `grep processor /proc/cpuinfo | wc -l`
 
-ls -l ./build/main/src/sphexa/sphexa-cuda
+ls -l ./build/main/src/sphexa/sphexa*
 
 # -> ./build/main/src/sphexa/sphexa-cuda
 # TODO: cublas_v2.h
