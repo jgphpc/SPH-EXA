@@ -18,8 +18,8 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "CodeQL_github" ]
-  schedule:
-    - cron: '*/2 * * * *'
+#   schedule:
+#     - cron: '*/2 * * * *'
 #     - cron: '15 2 * * 0'
 #     - cron: '* * */15 * *'
   # min/hour/day/month/day_of_week
