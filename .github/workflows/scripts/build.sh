@@ -2,27 +2,37 @@ TZ=Europe/Zurich
 # TODO: ccache
 # xz-utils -> = deps for tar
 # && sed -i 's@archive.ubuntu.com@ubuntu.ethz.ch@' /etc/apt/sources.list \
-mkdir -p cuda \
-&& ls -la ; pwd \    
-&& apt update --quiet \
-&& apt upgrade -y --quiet \
-&& DEBIAN_FRONTEND=noninteractive \
+sudo mkdir -p cuda
+ls -la ; pwd    
+sudo apt update --quiet
+sudo apt upgrade -y --quiet 
+DEBIAN_FRONTEND=noninteractive sudo \
    apt install -y --no-install-recommends \
    wget xz-utils unzip \
    cmake ninja-build \
    g++ libopenmpi-dev \
-   nvidia-cuda-dev libcub-dev libthrust-dev libcublas11 \
-&& apt clean autoremove \
-&& wget --quiet --no-check-certificate \
+   nvidia-cuda-dev libcub-dev libthrust-dev libcublas11
+sudo apt clean autoremove
+
+
+sudo mkdir -p /usr/local/games/cuda
+sudo chmod 777 /usr/local/games/cuda
+# wget --no-check-certificate
+wget --no-check-certificate \
    https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
-   https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz \
-&& tar --strip-components 1 -C cuda -xf cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz \
-&& tar --strip-components 1 -C cuda -xf cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz \
-&& cd cuda ; ln -s lib/ lib64 \
-&& cd /usr/local/games/ \
-&& PATH="$PATH:/cuda/bin" \
-   CPATH="$CPATH:/usr/include:/usr/lib/x86_64-linux-gnu/openmpi/include" \
-   cmake -GNinja -S SPH-EXA.git -B build \
+   https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
+mv *.tar.xz /tmp/
+tar --strip-components 1 -C /usr/local/games/cuda -xf /tmp/cuda_nvcc-linux-x86_64-11.8.89-archive.tar.xz
+tar --strip-components 1 -C /usr/local/games/cuda -xf /tmp/cuda_cudart-linux-x86_64-11.8.89-archive.tar.xz
+ln -s /usr/local/games/cuda/lib/ /usr/local/games/cuda/lib64
+
+
+cd /usr/local/games/ 
+PATH="$PATH:/usr/local/games/cuda/bin" \
+CPATH="$CPATH:/usr/include:/usr/lib/x86_64-linux-gnu/openmpi/include" \
+   cmake -GNinja \
+   -S /home/runner/work/SPH-EXA/SPH-EXA \
+   -B /usr/local/games/cuda/build \
    -DGPU_DIRECT=OFF \
    -DBUILD_ANALYTICAL=OFF \
    -DBUILD_TESTING=OFF \
@@ -32,9 +42,17 @@ mkdir -p cuda \
    -DCMAKE_CXX_COMPILER=mpicxx \
    -DCMAKE_C_COMPILER=mpicc \
    -DCMAKE_CUDA_COMPILER=nvcc \
-   -DCMAKE_CUDA_ARCHITECTURES=80 \
-&& cmake --build build -t sphexa-cuda `grep processor /proc/cpuinfo | wc -l` \
-&& ls -l ./build/main/src/sphexa/sphexa-cuda
+   -DCMAKE_CUDA_ARCHITECTURES=80
+#
+cmake \
+    --build /usr/local/games/cuda/build \
+    -t sphexa
+
+#    -t sphexa-cuda -j 4
+#    -j `grep processor /proc/cpuinfo | wc -l`
+
+ls -l /usr/local/games/cuda/build/main/src/sphexa/
+
 # -> ./build/main/src/sphexa/sphexa-cuda
 # TODO: cublas_v2.h
 # TODO: ccache
