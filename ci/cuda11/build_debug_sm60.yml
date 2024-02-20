@@ -1,7 +1,7 @@
 include:
   - local: 'ci/common.yml'
 
-sph:build:cuda11:sm60:
+sph:build:cuda11:sm60:debug:
   needs: ['sph:base:cuda11']
   extends: .container-builder
   stage: SPHbuild
@@ -11,5 +11,9 @@ sph:build:cuda11:sm60:
   variables:
     JG: 'YES'
     DOCKERFILE: 'ci/cuda11/Dockerfile_2'
-    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60}"
-    DOCKER_BUILD_ARGS: '["BASE_IMAGE=$BASE_IMAGE", "CUDA_SM=60"]'
+    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_DEBUG}"
+    DOCKER_BUILD_ARGS: '[
+        "BASE_IMAGE=$BASE_IMAGE",
+        "CUDA_SM=60",
+        "BUILD_TYPE=Debug",
+      ]'

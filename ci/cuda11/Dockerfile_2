@@ -1,6 +1,7 @@
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 ARG CUDA_SM
+ARG BUILD_TYPE
 
 ENV TZ Europe/Zurich
 ENV PATH="${PATH}:/usr/local/cuda/bin"
@@ -25,7 +26,7 @@ RUN echo \
     -DSPH_EXA_WITH_H5PART=ON \
     -DGPU_DIRECT=OFF \
     -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
-    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     && echo "## cmake --build + --install :" \
     && cmake --build build -j `grep -c processor /proc/cpuinfo` -t octree_perf_gpu \
 #    -DCMAKE_CUDA_FLAGS='-arch=sm_60' \

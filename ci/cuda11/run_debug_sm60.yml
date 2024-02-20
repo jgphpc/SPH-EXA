@@ -2,20 +2,19 @@ include:
   - local: 'ci/common.yml'
 
 #{{{ sph:pull:cuda11:sm60:
-sph:pull:cuda11:sm60:
-  needs: ['sph:build:cuda11:sm60']
-  extends: .container-runner-daint-gpu
-  stage: SPHpull
-  image: ${BUILD_CUDA11_SM60}
-  script:
-    - echo "Pulling image=${BUILD_CUDA11_SM60}"
-    - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
-    - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
-  variables:
-    PULL_IMAGE: 'YES'
-    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60}"
+# sph:pull:cuda11:sm60:
+#   needs: ['sph:build:cuda11:sm60']
+#   extends: .container-runner-daint-gpu
+#   stage: SPHpull
+#   image: ${BUILD_CUDA11_SM60}
+#   script:
+#     - echo "Pulling image=${BUILD_CUDA11_SM60_DEBUG}"
+#     - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
+#     - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
+#   variables:
+#     PULL_IMAGE: 'YES'
+#     PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60}"
 #}}}
-
 #del #{{{ test with:
 #del #{{{ -> installed:
 #del # -- Installing: /usr/local/sbin/coord_samples/coordinate_test
@@ -151,10 +150,11 @@ sph:pull:cuda11:sm60:
 # #}}}
 #{{{ sph:test:cuda:p100:
 sph:test:cuda:p100:
-  needs: ['sph:pull:cuda11:sm60']
+  needs: ['sph:build:cuda11:sm60:debug']
+  # needs: ['sph:pull:cuda11:sm60']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA}
+  image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - xx=`find /usr/local/games/build/ -name octree_perf_gpu`
