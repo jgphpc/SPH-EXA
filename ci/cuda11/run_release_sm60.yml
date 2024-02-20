@@ -17,6 +17,36 @@ sph:pull:cuda11:sm60:release:
     # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_release}"
 #}}}
 
+#{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
+sphexa-cuda:n2N2:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_release}
+  script:
+    - wget --quiet -O 50c.h5 "https://zenodo.org/records/8369645/files/50c.h5"
+    - echo "# --- sedov/gpu"
+    - ln -fs $BUILD_DIR/main/src/analytical_solutions/sedov_solution/sedov_solution .
+    - $BUILD_DIR/main/src/sphexa/sphexa-cuda --init sedov --glass ./50c.h5 
+      -s 200 -n 50 -w 200 -f x,y,z,h,m,p,rho,vx,vy,vz,temp -o /scratch/out_sedov.h5 --quiet
+    - python3 $BUILD_DIR/../SPH-EXA.git/main/src/analytical_solutions/compare_solutions.py 
+      -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt  
+    - cat /scratch/sedov.rpt
+    # - echo "Warning -n2"
+    - pwd
+    - ls -la
+    - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
 #{{{ sph:test:cuda11:sm60:release:domain:n1:
 domain:n1:
   needs: ['sph:pull:cuda11:sm60:release']
@@ -210,31 +240,3 @@ main:n2N1:
     # SLURM_TIMELIMIT    
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
-sphexa-cuda:n2N2:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
-  stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
-  # - export LD_LIBRARY_PATH=/usr/local/HDF_Group/HDF5/1.14.3/lib:$LD_LIBRARY_PATH
-  script:
-    - wget --quiet -O 50c.h5 https://zenodo.org/records/8369645/files/50c.h5
-    - echo "# --- sedov:gpu"
-    - ln -fs $BUILD_DIR/main/src/analytical_solutions/sedov_solution/sedov_solution .
-    - $BUILD_DIR/main/src/sphexa/sphexa-cuda --init sedov --glass ./50c.h5 -s 200 -n 50 -w 200 -f x,y,z,h,m,p,rho,vx,vy,vz,temp -o /scratch/out_sedov.h5 --quiet
-    - python3 $BUILD_DIR/../SPH-EXA.git/main/src/analytical_solutions/compare_solutions.py -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt  
-    - cat /scratch/sedov.rpt
-    # - echo "Warning: -n2"
-    - pwd
-    - ls -la
-    - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
-  variables:
-    USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 1
-    SLURM_NTASKS: 2
-    SLURM_NTASKS_PER_NODE: 1
-    PULL_IMAGE: 'NO'
-    SLURM_MPI_TYPE: 'pmi2'
-    # SLURM_PARTITION
-    # SLURM_TIMELIMIT    
-#}}}
