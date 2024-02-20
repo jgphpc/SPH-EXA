@@ -1,5 +1,4 @@
 include:
-  - local: 'ci/cuda11/build_debug.yml'
-  - local: 'ci/cuda11/run_debug.yml'
-#  - local: 'ci/cuda11/release.yml'
-
+  - local: 'ci/cuda11/build_base.yml'
+  - local: 'ci/cuda11/build_debug_sm60.yml'
+  - local: 'ci/cuda11/run_debug_sm60.yml'

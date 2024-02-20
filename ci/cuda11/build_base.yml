@@ -1,0 +1,12 @@
+include:
+  - local: 'ci/common.yml'
+
+#{{{ sph:base:cuda11:
+sph:base:cuda11:
+  extends: .container-builder-dynamic-name
+  stage: SPHbase
+  variables:
+    DOCKERFILE: 'ci/cuda11/Dockerfile_1'
+    WATCH_FILECHANGES: 'ci/cuda11/Dockerfile_1'
+    PERSIST_IMAGE_NAME: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-cuda11"
+#}}}

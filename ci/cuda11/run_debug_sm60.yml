@@ -1,38 +1,71 @@
-# # https://gitlab.com/cscs-ci/ci-testing/webhook-ci/gitlab-runner-k8s-container-builder.git
 include:
   - local: 'ci/common.yml'
-#   - remote: 'https://gitlab.com/cscs-ci/recipes/-/raw/master/templates/v2/.ci-ext.yml'
-# 
-# stages:
-#   - SPHbase     # no srun (extends=.container-builder-dynamic-name)
-#   - SPHbuild    # no srun (extends=.container-builder)
-#   - SPHpull     # on daint
-#   - SPHtest     # on daint
 
-#{{{ sph:pull:cuda11:
-sph:pull:cuda11:
-  needs: ['sph:build:cuda11']
+#{{{ sph:pull:cuda11:sm60:
+sph:pull:cuda11:sm60:
+  needs: ['sph:build:cuda11:sm60']
   extends: .container-runner-daint-gpu
   stage: SPHpull
-  image: ${BUILD_CUDA11}
+  image: ${BUILD_CUDA11_SM60}
   script:
-    - echo "Pulling image=${BUILD_CUDA11}"
+    - echo "Pulling image=${BUILD_CUDA11_SM60}"
     - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
     - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
   variables:
     PULL_IMAGE: 'YES'
-    PERSIST_IMAGE_NAME: "${BUILD_CUDA11}"
+    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60}"
 #}}}
 
+#del #{{{ test with:
+#del #{{{ -> installed:
+#del # -- Installing: /usr/local/sbin/coord_samples/coordinate_test
+#del # -- Installing: /usr/local/sbin/integration_mpi/globaloctree
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_halos
+#del # -- Installing: /usr/local/sbin/integration_mpi/box_mpi
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_focus
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_keys
+#del # -- Installing: /usr/local/sbin/integration_mpi/focus_transfer
+#del # -- Installing: /usr/local/sbin/integration_mpi/domain_2ranks
+#del # -- Installing: /usr/local/sbin/integration_mpi/treedomain
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_general
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_domain
+#del # -- Installing: /usr/local/sbin/integration_mpi/focus_tree
+#del # -- Installing: /usr/local/sbin/integration_mpi/domain_nranks
+#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_halos_gpu
+#del # -- Installing: /usr/local/sbin/performance/octree_perf
+#del # -- Installing: /usr/local/sbin/performance/peers_perf
+#del # -- Installing: /usr/local/sbin/performance/scan_perf
+#del # -- Installing: /usr/local/sbin/performance/hilbert_perf
+#del # -- Installing: /usr/local/sbin/performance/cudaNeighborsTest
+#del # -- Installing: /usr/local/sbin/performance/octree_perf_gpu
+#del # -- Installing: /usr/local/sbin/performance/hilbert_perf_gpu
+#del # -- Installing: /usr/local/sbin/unit/component_units
+#del # -- Installing: /usr/local/sbin/unit/component_units_omp
+#del # -- Installing: /usr/local/sbin/unit_cuda/component_units_cuda
+#del # -- Installing: /usr/local/sbin/ryoanji/ryoanji_demo/ryoanji_demo
+#del # -- Installing: /usr/local/sbin/ryoanji/cpu_unit_tests/ryoanji_cpu_unit_tests
+#del # -- Installing: /usr/local/sbin/ryoanji/unit_tests/ryoanji_unit_tests
+#del # -- Installing: /usr/local/sbin/ryoanji/global_upsweep_cpu
+#del # -- Installing: /usr/local/sbin/ryoanji/global_upsweep_gpu
+#del # -- Installing: /usr/local/sbin/hydro/kernel_tests_std
+#del # -- Installing: /usr/local/sbin/hydro/kernel_tests_ve
+#del # -- Installing: /usr/local/bin/sphexa
+#del # -- Installing: /usr/local/bin/sphexa-cuda
+#del # -- Installing: /usr/local/bin/sedov_solution
+#del # -- Installing: /usr/local/bin/compare_solutions.py
+#del # -- Installing: /usr/local/bin/compare_noh.py
+#del #}}}
+#del #}}}
+
 #{{{ sph:test:cuda:1:
-sph:test:cuda:1:
-  needs: ['sph:pull:cuda11']
-  extends: .container-runner-daint-gpu
-  stage: SPHtest
-  image: ${BUILD_CUDA}
-  script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-    - ls -la /usr/local/games/
+# sph:test:cuda:1:
+#   needs: ['sph:pull:cuda11:sm60']
+#   extends: .container-runner-daint-gpu
+#   stage: SPHtest
+#   image: ${BUILD_CUDA11_SM60}
+#   script:
+#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+#     - ls -la /usr/local/games/
 #     - ln -fs /usr/local/sbin/hydro/example_data.txt example_data.txt
 #     - /usr/local/sbin/coord_samples/coordinate_test
 #     - /usr/local/sbin/performance/scan_perf
@@ -43,13 +76,13 @@ sph:test:cuda:1:
 #     - /usr/local/sbin/unit/component_units
 #     - /usr/local/sbin/unit/component_units_omp
 #     - /usr/local/sbin/performance/peers_perf
-  variables:
-    USE_MPI: 'NO'
-    SLURM_JOB_NUM_NODES: 1
-    SLURM_NTASKS: 1
-    PULL_IMAGE: 'NO'
-    # SLURM_PARTITION
-    # SLURM_TIMELIMIT    
+#   variables:
+#     USE_MPI: 'NO'
+#     SLURM_JOB_NUM_NODES: 1
+#     SLURM_NTASKS: 1
+#     PULL_IMAGE: 'NO'
+#     # SLURM_PARTITION
+#     # SLURM_TIMELIMIT    
 #}}}
 # #{{{ sph:test:cuda:2:
 # sph:test:cuda:2:
@@ -116,14 +149,17 @@ sph:test:cuda:1:
 #     # SLURM_PARTITION
 #     # SLURM_TIMELIMIT    
 # #}}}
-# #{{{ sph:test:cuda:p100:
-# sph:test:cuda:p100:
-#   needs: ['sph:pull:cuda']
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+#{{{ sph:test:cuda:p100:
+sph:test:cuda:p100:
+  needs: ['sph:pull:cuda']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - xx=`find /usr/local/games/build/ -name octree_perf_gpu`
+    - echo "xx=$xx"  
+    - $xx
 #     - /usr/local/sbin/performance/hilbert_perf_gpu
 #     # - /usr/local/sbin/performance/cudaNeighborsTest
 #     # - /usr/local/sbin/performance/neighbors_test_gpu
@@ -133,14 +169,14 @@ sph:test:cuda:1:
 #     - /usr/local/sbin/ryoanji/unit_tests/ryoanji_unit_tests
 #     - /usr/local/sbin/ryoanji/global_upsweep_gpu
 #     - /usr/local/sbin/ryoanji/ryoanji_demo/ryoanji_demo 
-#   variables:
-#     USE_MPI: 'NO'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 1
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-# #}}}
+  variables:
+    USE_MPI: 'NO'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
 # #{{{ sph:test:cuda:sphexa:cpu:
 # sph:test:cuda:sphexa:cpu:
 #   needs: ['sph:pull:cuda']

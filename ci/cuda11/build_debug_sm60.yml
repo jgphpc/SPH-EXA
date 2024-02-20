@@ -1,0 +1,14 @@
+include:
+  - local: 'ci/common.yml'
+
+sph:build:cuda11:sm60:
+  needs: ['sph:base:cuda11']
+  extends: .container-builder
+  stage: SPHbuild
+  before_script:
+    - echo "PERSIST_IMAGE_NAME=$PERSIST_IMAGE_NAME"
+  variables:
+    JG: 'YES'
+    DOCKERFILE: 'ci/cuda11/Dockerfile_2'
+    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60}"
+    DOCKER_BUILD_ARGS: '["BASE_IMAGE=$BASE_IMAGE", "CUDA_SM=60"]'

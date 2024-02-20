@@ -12,7 +12,7 @@ variables:
   # version-tag will be added by .container-builder-dynamic-name, 
   # see https://gitlab.com/cscs-ci/ci-testing/containerised_ci_doc/-/blob/main/dependency_management.md
   # https://gitlab.com/cscs-ci/ci-testing/webhook-ci/mirrors/44692846847247/4264416954089684/-/pipelines
-  BUILD_CUDA11: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-$CI_COMMIT_SHORT_SHA"
+  BUILD_CUDA11_SM60: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm60-$CI_COMMIT_SHORT_SHA"
   ## BASE_CUDA: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-cuda"
   # BASE_HIP: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-hip"
   # BUILD_HIP: "${CSCS_REGISTRY_PATH}/sph-exa_build:hip-$CI_COMMIT_SHORT_SHA"
@@ -21,6 +21,8 @@ variables:
   # REBUILD_BASE_IMAGE: 'YES'
   # SARUS_VERBOSE: 'YES'
 #}}}
+
+# https://gitlab.com/cscs-ci/ci-testing/webhook-ci/gitlab-runner-k8s-container-builder.git
 
 # .container-runner-daint-mc
 # .container-runner-daint-gpu
