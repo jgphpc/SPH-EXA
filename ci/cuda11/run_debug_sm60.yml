@@ -15,222 +15,201 @@ sph:pull:cuda11:sm60:debug:
     PULL_IMAGE: 'YES'
     # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_DEBUG}"
 #}}}
-#del #{{{ test with:
-#del #{{{ -> installed:
-#del # -- Installing: /usr/local/sbin/coord_samples/coordinate_test
-#del # -- Installing: /usr/local/sbin/integration_mpi/globaloctree
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_halos
-#del # -- Installing: /usr/local/sbin/integration_mpi/box_mpi
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_focus
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_keys
-#del # -- Installing: /usr/local/sbin/integration_mpi/focus_transfer
-#del # -- Installing: /usr/local/sbin/integration_mpi/domain_2ranks
-#del # -- Installing: /usr/local/sbin/integration_mpi/treedomain
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_general
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_domain
-#del # -- Installing: /usr/local/sbin/integration_mpi/focus_tree
-#del # -- Installing: /usr/local/sbin/integration_mpi/domain_nranks
-#del # -- Installing: /usr/local/sbin/integration_mpi/exchange_halos_gpu
-#del # -- Installing: /usr/local/sbin/performance/octree_perf
-#del # -- Installing: /usr/local/sbin/performance/peers_perf
-#del # -- Installing: /usr/local/sbin/performance/scan_perf
-#del # -- Installing: /usr/local/sbin/performance/hilbert_perf
-#del # -- Installing: /usr/local/sbin/performance/cudaNeighborsTest
-#del # -- Installing: /usr/local/sbin/performance/octree_perf_gpu
-#del # -- Installing: /usr/local/sbin/performance/hilbert_perf_gpu
-#del # -- Installing: /usr/local/sbin/unit/component_units
-#del # -- Installing: /usr/local/sbin/unit/component_units_omp
-#del # -- Installing: /usr/local/sbin/unit_cuda/component_units_cuda
-#del # -- Installing: /usr/local/sbin/ryoanji/ryoanji_demo/ryoanji_demo
-#del # -- Installing: /usr/local/sbin/ryoanji/cpu_unit_tests/ryoanji_cpu_unit_tests
-#del # -- Installing: /usr/local/sbin/ryoanji/unit_tests/ryoanji_unit_tests
-#del # -- Installing: /usr/local/sbin/ryoanji/global_upsweep_cpu
-#del # -- Installing: /usr/local/sbin/ryoanji/global_upsweep_gpu
-#del # -- Installing: /usr/local/sbin/hydro/kernel_tests_std
-#del # -- Installing: /usr/local/sbin/hydro/kernel_tests_ve
-#del # -- Installing: /usr/local/bin/sphexa
-#del # -- Installing: /usr/local/bin/sphexa-cuda
-#del # -- Installing: /usr/local/bin/sedov_solution
-#del # -- Installing: /usr/local/bin/compare_solutions.py
-#del # -- Installing: /usr/local/bin/compare_noh.py
-#del #}}}
-#del #}}}
 
-#{{{ sph:test:cuda:1:
-# sph:test:cuda:1:
-#   needs: ['sph:pull:cuda11:sm60']
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA11_SM60}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-#     - ls -la /usr/local/games/
-#     - ln -fs /usr/local/sbin/hydro/example_data.txt example_data.txt
-#     - /usr/local/sbin/coord_samples/coordinate_test
-#     - /usr/local/sbin/performance/scan_perf
-#     - /usr/local/sbin/coord_samples/coordinate_test
-#     - /usr/local/sbin/hydro/sph_tests
-#     - /usr/local/sbin/hydro/turbulence_tests  
-#     - /usr/local/sbin/ryoanji/cpu_unit_tests/ryoanji_cpu_unit_tests
-#     - /usr/local/sbin/unit/component_units
-#     - /usr/local/sbin/unit/component_units_omp
-#     - /usr/local/sbin/performance/peers_perf
-#   variables:
-#     USE_MPI: 'NO'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 1
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-#}}}
-# #{{{ sph:test:cuda:2:
-# sph:test:cuda:2:
-#   needs: ['sph:pull:cuda']
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-#     - /usr/local/sbin/integration_mpi/domain_2ranks
-#     - /usr/local/sbin/integration_mpi/exchange_focus
-#     - /usr/local/sbin/integration_mpi/exchange_halos
-#     - /usr/local/sbin/integration_mpi/focus_transfer
-#     - /usr/local/sbin/integration_mpi/globaloctree
-#     # - /usr/local/sbin/integration_mpi/exchange_halos_gpu # needs 2 gpus
-#   variables:
-#     USE_MPI: 'YES'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 2
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-# #}}}
-# #{{{ sph:test:cuda:2cn:
-# # sph:test:cuda:2cn:
-# #   needs: ['sph:pull:cuda']
-# #   extends: .container-runner-daint-gpu
-# #   stage: SPHtest
-# #   image: ${BUILD_CUDA}
-# #   script:
-# #     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-# #     - /usr/local/sbin/integration_mpi/assignment_gpu
-# #     - /usr/local/sbin/integration_mpi/domain_gpu
-# #     - /usr/local/sbin/integration_mpi/exchange_domain_gpu
-# #   variables:
-# #     USE_MPI: 'YES'
-# #     SLURM_JOB_NUM_NODES: 2
-# #     SLURM_NTASKS: 2
-# #     PULL_IMAGE: 'NO'
-# #     SLURM_PARTITION: 'debug'
-# #     # SLURM_TIMELIMIT
-# #}}}
-# #{{{ sph:test:cuda:5:
-# sph:test:cuda:5:
-#   needs: ['sph:pull:cuda']
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-#     - /usr/local/sbin/integration_mpi/exchange_domain
-#     - /usr/local/sbin/integration_mpi/box_mpi
-#     - /usr/local/sbin/integration_mpi/focus_tree
-#     - /usr/local/sbin/integration_mpi/treedomain
-#     - /usr/local/sbin/integration_mpi/domain_nranks
-#     - /usr/local/sbin/integration_mpi/exchange_general
-#     - /usr/local/sbin/integration_mpi/exchange_keys
-#     - /usr/local/sbin/ryoanji/global_upsweep_cpu
-#   variables:
-#     USE_MPI: 'YES'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 5
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-# #}}}
-#{{{ sph:test:cuda:p100:
-sph:test:cuda:p100:
+    #{{{ sph:test:cuda11:sm60:debug:domain:1:
+sph:test:cuda11:sm60:debug:domain:1:
   needs: ['sph:pull:cuda11:sm60:debug']
-  # needs: ['sph:pull:cuda11:sm60']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-    - /usr/local/games/build/domain/test/performance/octree_perf_gpu
-#     - /usr/local/sbin/performance/hilbert_perf_gpu
-#     # - /usr/local/sbin/performance/cudaNeighborsTest
-#     # - /usr/local/sbin/performance/neighbors_test_gpu
-#     # - /usr/local/sbin/performance/exchange_halos_gpu # moved to integration_mpi
-#     - /usr/local/sbin/performance/octree_perf_gpu
-#     - /usr/local/sbin/unit_cuda/component_units_cuda
-#     - /usr/local/sbin/ryoanji/unit_tests/ryoanji_unit_tests
-#     - /usr/local/sbin/ryoanji/global_upsweep_gpu
-#     - /usr/local/sbin/ryoanji/ryoanji_demo/ryoanji_demo 
+    - /usr/local/games/build/domain/test/coord_samples/coordinate_test
+    - /usr/local/games/build/domain/test/performance/scan_perf
+    - /usr/local/games/build/domain/test/unit/component_units
+    - /usr/local/games/build/domain/test/unit/component_units_omp
+    - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
   variables:
-    USE_MPI: 'NO'
+    USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 1
     PULL_IMAGE: 'NO'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-# #{{{ sph:test:cuda:sphexa:cpu:
-# sph:test:cuda:sphexa:cpu:
-#   needs: ['sph:pull:cuda']
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-#     - export LD_LIBRARY_PATH=/usr/local/HDF_Group/HDF5/1.13.2/lib:$LD_LIBRARY_PATH
-#     - wget --quiet -O glass.h5 https://zenodo.org/records/8369645/files/50c.h5
-#     - echo "sedov:cpu"
-#     - /usr/local/bin/sphexa --init sedov --prop std -s 1 -n 50
-#     - echo "sedov+ve:cpu"
-#     - /usr/local/bin/sphexa --init sedov --prop ve -s 1 -n 50
-#     - echo "noh:cpu"
-#     - /usr/local/bin/sphexa --init noh --glass ./glass.h5 -s 1 -n 50
-#   variables:
-#     USE_MPI: 'YES'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 1
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-# #}}}
-# #{{{ sph:test:cuda:sphexa:gpu:
-# # TODO: MPICH_RDMA_ENABLED_CUDA=1 LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libcuda.so
-# sph:test:cuda:sphexa:gpu:
-#   needs: ['sph:pull:cuda' ]
-#   extends: .container-runner-daint-gpu
-#   stage: SPHtest
-#   image: ${BUILD_CUDA}
-#   script:
-#     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-#     - export LD_LIBRARY_PATH=/usr/local/HDF_Group/HDF5/1.13.2/lib:$LD_LIBRARY_PATH
-#     - ln -fs /usr/local/bin/sedov_solution .
-#     - wget --quiet -O glass.h5 https://zenodo.org/records/8369645/files/50c.h5
-#     - echo "# --- sedov:gpu"
-#     - /usr/local/bin/sphexa-cuda --init sedov --glass ./glass.h5 -s 200 -n 50 -w 200 -f x,y,z,h,m,p,rho,vx,vy,vz,temp -o /scratch/out_sedov.h5 --quiet
-#     - python3 /usr/local/bin/compare_solutions.py -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt
-#     #
-#     - echo "# --- noh:gpu"
-#     - /usr/local/bin/sphexa-cuda --init noh --glass ./glass.h5 -s 200 -n 50 -w 200 -f x,y,z,h,m,p,rho,vx,vy,vz,temp -o /scratch/out_noh.h5 --quiet
-#     - python3 /usr/local/bin/compare_noh.py -s 200 /scratch/out_noh.h5 > /scratch/noh.rpt
-#     - echo "# --- evrard:gpu"
-#     - /usr/local/bin/sphexa-cuda --init evrard --glass ./glass.h5 -s 10 -n 50 -w 10 --outDir /scratch/ --quiet
-#     - echo "# --- rpt:"
-#     - cat /scratch/sedov.rpt
-#     - cat /scratch/noh.rpt
-#     - pwd
-#     - ls -la
-#     - reframe -c /usr/local/games/rfm.py -r -S rpt_path=/scratch
-#   variables:
-#     USE_MPI: 'YES'
-#     SLURM_JOB_NUM_NODES: 1
-#     SLURM_NTASKS: 1
-#     PULL_IMAGE: 'NO'
-#     # SLURM_PARTITION
-#     # SLURM_TIMELIMIT    
-# #}}}
+    #{{{ sph:test:cuda11:sm60:debug:domain:2:
+sph:test:cuda11:sm60:debug:domain:2:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/domain/test/integration_mpi/globaloctree
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_halos
+    - /usr/local/games/build/domain/test/integration_mpi/box_mpi
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_focus
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_keys
+    - /usr/local/games/build/domain/test/integration_mpi/focus_transfer
+    - /usr/local/games/build/domain/test/integration_mpi/domain_2ranks
+    - /usr/local/games/build/domain/test/integration_mpi/domain_resize
+    # - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu # needs 2 gpus
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
+    - /usr/local/games/build/domain/test/integration_mpi/assignment_gpu
+    - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 2
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:domain:2cn:
+sph:test:cuda11:sm60:debug:domain:2cn:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    PULL_IMAGE: 'NO'
+    SLURM_PARTITION: 'debug'
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:domain:12:
+sph:test:cuda11:sm60:debug:domain:12:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/domain/test/integration_mpi/treedomain
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_general
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_domain
+    - /usr/local/games/build/domain/test/integration_mpi/focus_tree
+    - /usr/local/games/build/domain/test/integration_mpi/domain_nranks
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 12
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
+    #{{{ sph:test:cuda11:sm60:debug:ryoanji:1:
+sph:test:cuda11:sm60:debug:ryoanji:1:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/ryoanji/test/ryoanji_cpu_unit_tests
+    - /usr/local/games/build/ryoanji/test/ryoanji_unit_tests # GPU
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:ryoanji:6:
+sph:test:cuda11:sm60:debug:ryoanji:6:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/ryoanji/test/interface/global_forces_gpu # GPU
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 6
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:ryoanji:10:
+sph:test:cuda11:sm60:debug:ryoanji:10:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/ryoanji/test/interface/global_upsweep_cpu
+    - /usr/local/games/build/ryoanji/test/interface/global_upsweep_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 10
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
+    #{{{ sph:test:cuda11:sm60:debug:sph:1:
+sph:test:cuda11:sm60:debug:sph:1:
+  # ln -fs /usr/local/sbin/hydro/example_data.txt example_data.txt
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - ln -s /usr/local/games/build/sph/test/example_data.txt .
+    - /usr/local/games/build/sph/test/sph_tests
+    - /usr/local/games/build/sph/test/hydro_turb/turbulence_tests
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:main:1:
+sph:test:cuda11:sm60:debug:main:1:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/main/test/frontend_units
+    - /usr/local/games/build/main/test/frontend_units_cuda
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+    #{{{ sph:test:cuda11:sm60:debug:main:2:
+sph:test:cuda11:sm60:debug:main:2:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/main/test/mpi/hdf5io
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 2
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}

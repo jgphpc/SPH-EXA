@@ -22,13 +22,13 @@ RUN echo \
     -DCMAKE_CXX_COMPILER=mpicxx \
     -DCMAKE_C_COMPILER=mpicc \
     -DBUILD_TESTING=ON \
-    -DBUILD_ANALYTICAL=OFF \
+    -DBUILD_ANALYTICAL=ON \
     -DSPH_EXA_WITH_H5PART=ON \
     -DGPU_DIRECT=OFF \
     -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-    && echo "## cmake --build + --install :" \
-    && cmake --build build -j `grep -c processor /proc/cpuinfo` -t octree_perf_gpu \
+    && echo "## cmake --build:" \
+    && cmake --build build -j `grep -c processor /proc/cpuinfo` \
 #    -DCMAKE_CUDA_FLAGS='-arch=sm_60' \
 #     && cmake --install build \
 #     && cp SPH-EXA.git/.gitlab/rfm.py /usr/local/games/rfm.py \
