@@ -49,8 +49,8 @@ sph:test:cuda11:sm60:debug:domain:2:
     - echo "Running sph:test:cuda11:sm60:debug:domain:2:$MYTEST on $ARCH"
   parallel:
     matrix:
-      MYTEST: ["/usr/local/games/build/domain/test/integration_mpi/exchange_halos", "/usr/local/games/build/domain/test/integration_mpi/box_mpi", "/usr/local/games/build/domain/test/integration_mpi/exchange_focus", "/usr/local/games/build/domain/test/integration_mpi/exchange_keys", "/usr/local/games/build/domain/test/integration_mpi/focus_transfer", "/usr/local/games/build/domain/test/integration_mpi/domain_2ranks", "/usr/local/games/build/domain/test/integration_mpi/domain_resize"]
-      ARCH: ["sm_60"]
+      - MYTEST: ["/usr/local/games/build/domain/test/integration_mpi/exchange_halos", "/usr/local/games/build/domain/test/integration_mpi/box_mpi", "/usr/local/games/build/domain/test/integration_mpi/exchange_focus", "/usr/local/games/build/domain/test/integration_mpi/exchange_keys", "/usr/local/games/build/domain/test/integration_mpi/focus_transfer", "/usr/local/games/build/domain/test/integration_mpi/domain_2ranks", "/usr/local/games/build/domain/test/integration_mpi/domain_resize"]
+      - ARCH: ["sm_60"]
     # - {'name': '/usr/local/games/build/domain/test/integration_mpi/exchange_halos'}
     # - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu # needs 2 gpus
     # - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
