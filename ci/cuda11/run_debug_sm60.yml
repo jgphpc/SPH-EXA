@@ -46,10 +46,10 @@ sph:test:cuda11:sm60:debug:domain:2:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "running sph:test:cuda11:sm60:debug:domain:2:$mytest on $ARCH"
+    - echo "Running sph:test:cuda11:sm60:debug:domain:2:$MYTEST on $ARCH"
   parallel:
     matrix:
-      - mytest: [
+      - MYTEST: [
         /usr/local/games/build/domain/test/integration_mpi/exchange_halos,
         /usr/local/games/build/domain/test/integration_mpi/box_mpi,
         /usr/local/games/build/domain/test/integration_mpi/exchange_focus,
@@ -58,7 +58,7 @@ sph:test:cuda11:sm60:debug:domain:2:
         /usr/local/games/build/domain/test/integration_mpi/domain_2ranks,
         /usr/local/games/build/domain/test/integration_mpi/domain_resize
       ]
-       ARCH: ['sm60']
+      ARCH: ['sm60']
     # - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu # needs 2 gpus
     # - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
     # - /usr/local/games/build/domain/test/integration_mpi/assignment_gpu
