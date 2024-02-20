@@ -4,7 +4,7 @@ include:
 stages:
   - SPHbase     # no srun (extends=.container-builder-dynamic-name)
   - SPHbuild    # no srun (extends=.container-builder)
-  # - SPHpull     # on daint
+  - SPHpull     # on daint
   - SPHtest     # on daint
 
 #{{{ variables
