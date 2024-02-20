@@ -151,7 +151,7 @@ sph:pull:cuda11:sm60:
 # #}}}
 #{{{ sph:test:cuda:p100:
 sph:test:cuda:p100:
-  needs: ['sph:pull:cuda']
+  needs: ['sph:pull:cuda11:sm60']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA}
