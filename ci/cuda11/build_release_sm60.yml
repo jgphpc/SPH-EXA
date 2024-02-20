@@ -15,5 +15,5 @@ sph:build:cuda11:sm60:release:
     DOCKER_BUILD_ARGS: '[
         "BASE_IMAGE=$BASE_IMAGE",
         "CUDA_SM=60",
-        "BUILD_TYPE=Release",
+        "BUILD_TYPE=Release"
       ]'
