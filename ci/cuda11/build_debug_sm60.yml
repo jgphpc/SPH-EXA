@@ -15,5 +15,5 @@ sph:build:cuda11:sm60:debug:
     DOCKER_BUILD_ARGS: '[
         "BASE_IMAGE=$BASE_IMAGE",
         "CUDA_SM=60",
-        "BUILD_TYPE=Debug",
+        "BUILD_TYPE=Debug"
       ]'
