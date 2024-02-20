@@ -1,0 +1,34 @@
+include:
+  - remote: 'https://gitlab.com/cscs-ci/recipes/-/raw/master/templates/v2/.ci-ext.yml'
+
+stages:
+  - SPHbase     # no srun (extends=.container-builder-dynamic-name)
+  - SPHbuild    # no srun (extends=.container-builder)
+  - SPHpull     # on daint
+  - SPHtest     # on daint
+
+#{{{ variables
+variables:
+  # version-tag will be added by .container-builder-dynamic-name, 
+  # see https://gitlab.com/cscs-ci/ci-testing/containerised_ci_doc/-/blob/main/dependency_management.md
+  # https://gitlab.com/cscs-ci/ci-testing/webhook-ci/mirrors/44692846847247/4264416954089684/-/pipelines
+  ## BASE_CUDA: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-cuda"
+  BUILD_CUDA11: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-$CI_COMMIT_SHORT_SHA"
+  # BUILD_CUDA1: "${CSCS_REGISTRY_PATH}/sph-exa_build:1.0"
+  # BASE_HIP: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-hip"
+  # BUILD_HIP: "${CSCS_REGISTRY_PATH}/sph-exa_build:hip-$CI_COMMIT_SHORT_SHA"
+  # DEPS_PATH: 'ftp://ftp.cscs.ch/out/jgp/hpc/containers'
+  VERBOSE: 'YES'
+  #no: SYSTEM_NAME: '.dom'
+  # REBUILD_BASE_IMAGE: 'YES'
+  # SARUS_VERBOSE: 'YES'
+#}}}
+
+# .container-runner-daint-mc
+# .container-runner-daint-gpu
+# 
+# .container-runner-clariden-a100
+# .container-runner-clariden-mi200
+# .container-runner-clariden-zen2
+# 
+# .container-runner-santis-gh200
