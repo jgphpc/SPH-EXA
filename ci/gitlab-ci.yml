@@ -2,3 +2,5 @@ include:
   - local: 'ci/cuda11/build_base.yml'
   - local: 'ci/cuda11/build_debug_sm60.yml'
   - local: 'ci/cuda11/run_debug_sm60.yml'
+    #  - local: 'ci/cuda11/build_release_sm60.yml'
+    #  - local: 'ci/cuda11/run_release_sm60.yml'

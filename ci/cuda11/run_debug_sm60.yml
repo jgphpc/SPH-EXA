@@ -32,8 +32,9 @@ sph:test:cuda11:sm60:debug:domain:1:
     - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 1
+    # SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 1
+    SLURM_NTASKS_PER_NODE: 1
     PULL_IMAGE: 'NO'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
@@ -45,36 +46,79 @@ sph:test:cuda11:sm60:debug:domain:2:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-    - /usr/local/games/build/domain/test/integration_mpi/exchange_halos
-    - /usr/local/games/build/domain/test/integration_mpi/box_mpi
-    - /usr/local/games/build/domain/test/integration_mpi/exchange_focus
-    - /usr/local/games/build/domain/test/integration_mpi/exchange_keys
-    - /usr/local/games/build/domain/test/integration_mpi/focus_transfer
-    - /usr/local/games/build/domain/test/integration_mpi/domain_2ranks
-    - /usr/local/games/build/domain/test/integration_mpi/domain_resize
+    - echo "running sph:test:cuda11:sm60:debug:domain:2:$mytest on $ARCH"
+  parallel:
+    matrix:
+      - mytest: [
+        /usr/local/games/build/domain/test/integration_mpi/exchange_halos,
+        /usr/local/games/build/domain/test/integration_mpi/box_mpi,
+        /usr/local/games/build/domain/test/integration_mpi/exchange_focus,
+        /usr/local/games/build/domain/test/integration_mpi/exchange_keys,
+        /usr/local/games/build/domain/test/integration_mpi/focus_transfer,
+        /usr/local/games/build/domain/test/integration_mpi/domain_2ranks,
+        /usr/local/games/build/domain/test/integration_mpi/domain_resize
+      ]
+       ARCH: ['sm60']
     # - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu # needs 2 gpus
-    - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
-    - /usr/local/games/build/domain/test/integration_mpi/assignment_gpu
-    - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
+    # - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
+    # - /usr/local/games/build/domain/test/integration_mpi/assignment_gpu
+    # - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 1
+    # SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 2
     PULL_IMAGE: 'NO'
     SLURM_MPI_TYPE: 'pmi2'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:debug:domain:2cn:
-sph:test:cuda11:sm60:debug:domain:2cn:
+#{{{ sph:test:cuda11:sm60:debug:domain:2cna:
+sph:test:cuda11:sm60:debug:domain:2cna:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/domain/test/integration_mpi/exchange_domain_gpu
+    - /usr/local/games/build/domain/test/integration_mpi/assignment_gpu
+    - /usr/local/games/build/domain/test/integration_mpi/domain_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:debug:domain:2cnb:
+sph:test:cuda11:sm60:debug:domain:2cnb:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  # TODO: fixme
+  script:
     - /usr/local/games/build/domain/test/integration_mpi/globaloctree
+    # - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    PULL_IMAGE: 'NO'
+    SLURM_PARTITION: 'debug'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:debug:domain:2cnc:
+sph:test:cuda11:sm60:debug:domain:2cnc:
+  needs: ['sph:pull:cuda11:sm60:debug']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_DEBUG}
+  script:
+    # - /usr/local/games/build/domain/test/integration_mpi/globaloctree
     - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu
   variables:
     USE_MPI: 'YES'
@@ -92,7 +136,6 @@ sph:test:cuda11:sm60:debug:domain:12:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/domain/test/integration_mpi/treedomain
     - /usr/local/games/build/domain/test/integration_mpi/exchange_general
     - /usr/local/games/build/domain/test/integration_mpi/exchange_domain
@@ -115,7 +158,6 @@ sph:test:cuda11:sm60:debug:ryoanji:1:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/ryoanji_cpu_unit_tests
     - /usr/local/games/build/ryoanji/test/ryoanji_unit_tests # GPU
   variables:
@@ -132,35 +174,37 @@ sph:test:cuda11:sm60:debug:ryoanji:6:
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
+  # TODO: explain why sarus hangs with -n>2, it should be run with -n6 here
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/interface/global_forces_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 6
-    SLURM_NTASKS: 6
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
     PULL_IMAGE: 'NO'
-    SLURM_PARTITION: 'debug'
     SLURM_MPI_TYPE: 'pmi2'
+    SLURM_PARTITION: 'debug'
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:debug:ryoanji:4:
-sph:test:cuda11:sm60:debug:ryoanji:4:
+#{{{ sph:test:cuda11:sm60:debug:ryoanji:2:
+sph:test:cuda11:sm60:debug:ryoanji:2:
+  # TODO: explain why sarus hangs with -n>2, it should be run with -n10 here
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/interface/global_upsweep_cpu
     - /usr/local/games/build/ryoanji/test/interface/global_upsweep_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 4
-    SLURM_NTASKS: 4
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
     PULL_IMAGE: 'NO'
     SLURM_MPI_TYPE: 'pmi2'
-    # SLURM_PARTITION
+    SLURM_PARTITION: 'debug'
     # SLURM_TIMELIMIT    
 #}}}
 
@@ -172,7 +216,6 @@ sph:test:cuda11:sm60:debug:sph:1:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - ln -s /usr/local/games/build/sph/test/example_data.txt .
     - /usr/local/games/build/sph/test/sph_tests
     - /usr/local/games/build/sph/test/hydro_turb/turbulence_tests
@@ -191,7 +234,6 @@ sph:test:cuda11:sm60:debug:main:1:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/main/test/frontend_units
     - /usr/local/games/build/main/test/frontend_units_cuda
   variables:
@@ -209,7 +251,6 @@ sph:test:cuda11:sm60:debug:main:2:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/main/test/mpi/hdf5io
   variables:
     USE_MPI: 'YES'

@@ -19,6 +19,7 @@ variables:
   # BUILD_HIP: "${CSCS_REGISTRY_PATH}/sph-exa_build:hip-$CI_COMMIT_SHORT_SHA"
   # DEPS_PATH: 'ftp://ftp.cscs.ch/out/jgp/hpc/containers'
   VERBOSE: 'YES'
+  LC_ALL: 'C'
   # REBUILD_BASE_IMAGE: 'YES'
   # SARUS_VERBOSE: 'YES'
 #}}}
