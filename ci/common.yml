@@ -18,6 +18,7 @@ variables:
   # BASE_HIP: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-hip"
   # BUILD_HIP: "${CSCS_REGISTRY_PATH}/sph-exa_build:hip-$CI_COMMIT_SHORT_SHA"
   # DEPS_PATH: 'ftp://ftp.cscs.ch/out/jgp/hpc/containers'
+  BUILD_DIR: '/usr/local/games/build'
   VERBOSE: 'YES'
   LC_ALL: 'C'
   # REBUILD_BASE_IMAGE: 'YES'
