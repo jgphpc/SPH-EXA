@@ -14,7 +14,13 @@ variables:
   # https://gitlab.com/cscs-ci/ci-testing/webhook-ci/mirrors/44692846847247/4264416954089684/-/pipelines
   BUILD_CUDA11_SM60_DEBUG: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm60-debug-$CI_COMMIT_SHORT_SHA"
   BUILD_CUDA11_SM60_RELEASE: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm60-release-$CI_COMMIT_SHORT_SHA"
-  ## BASE_CUDA: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-cuda"
+  #
+  BUILD_CUDA11_SM80_DEBUG: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm80-debug-$CI_COMMIT_SHORT_SHA"
+  BUILD_CUDA11_SM80_RELEASE: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm80-release-$CI_COMMIT_SHORT_SHA"
+  #
+  BUILD_CUDA11_SM90_DEBUG: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm90-debug-$CI_COMMIT_SHORT_SHA"
+  BUILD_CUDA11_SM90_RELEASE: "${CSCS_REGISTRY_PATH}/sph-exa_build:cuda11-sm90-release-$CI_COMMIT_SHORT_SHA"
+  #
   # BASE_HIP: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-hip"
   # BUILD_HIP: "${CSCS_REGISTRY_PATH}/sph-exa_build:hip-$CI_COMMIT_SHORT_SHA"
   # DEPS_PATH: 'ftp://ftp.cscs.ch/out/jgp/hpc/containers'
