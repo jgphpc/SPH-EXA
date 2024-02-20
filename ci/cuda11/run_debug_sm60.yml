@@ -227,7 +227,7 @@ main:n1N1:
     - python3 $BUILD_DIR/../SPH-EXA.git/main/src/analytical_solutions/compare_solutions.py
       -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt  
     - cat /scratch/sedov.rpt
-    - echo "Warning: -n>1 fails with: domain/include/cstone/domain/buffer_description.hpp:212: cstone::LocalIndex cstone::domain_exchange::receiveStart(cstone::BufferDescription, cstone::LocalIndex, cstone::LocalIndex): Assertion fitHead || bufDesc.size - bufDesc.end >= numIncoming failed"
+    - echo "Warning: -n2 fails in domain/include/cstone/domain/buffer_description.hpp/212"
     - pwd
     - ls -la
     - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
