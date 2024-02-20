@@ -1,16 +1,15 @@
 ARG BASE_IMAGE
-ARG CUDA_SM
 FROM $BASE_IMAGE
+ARG CUDA_SM
 
 ENV TZ Europe/Zurich
-ENV SM=${CUDA_SM}
 ENV PATH="${PATH}:/usr/local/cuda/bin"
 ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/share/cmake:${CMAKE_PREFIX_PATH}"
 COPY . /usr/local/games/SPH-EXA.git
 
 #{{{ build
 RUN echo \
-    && echo "## cmake -B:${SM}-${CUDA_SM}" \
+    && echo "## cmake -B:sm_${CUDA_SM}" \
     && date \
     && which nvcc \
     && nvcc --version \
@@ -25,7 +24,7 @@ RUN echo \
     -DBUILD_ANALYTICAL=OFF \
     -DSPH_EXA_WITH_H5PART=ON \
     -DGPU_DIRECT=OFF \
-    -DCMAKE_CUDA_ARCHITECTURES=${SM} \
+    -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
     -DCMAKE_BUILD_TYPE=Debug \
     && echo "## cmake --build + --install :" \
     && cmake --build build -j `grep -c processor /proc/cpuinfo` -t octree_gpu \
