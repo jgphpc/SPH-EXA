@@ -6,7 +6,8 @@ sph:build:cuda11:sm60:
   extends: .container-builder
   stage: SPHbuild
   before_script:
-    - echo "PERSIST_IMAGE_NAME=$PERSIST_IMAGE_NAME"
+    - echo "IN=DOCKERFILE=$DOCKERFILE"
+    - echo "OUT=PERSIST_IMAGE_NAME=$PERSIST_IMAGE_NAME"
   variables:
     JG: 'YES'
     DOCKERFILE: 'ci/cuda11/Dockerfile_2'

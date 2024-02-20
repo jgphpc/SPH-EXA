@@ -24,7 +24,7 @@ RUN echo \
     -DBUILD_ANALYTICAL=OFF \
     -DSPH_EXA_WITH_H5PART=ON \
     -DGPU_DIRECT=OFF \
-    -DCMAKE_CUDA_ARCHITECTURES=$CUDA_SM \
+    -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
     -DCMAKE_BUILD_TYPE=Debug \
     && echo "## cmake --build + --install :" \
     && cmake --build build -j `grep -c processor /proc/cpuinfo` -t octree_gpu \
