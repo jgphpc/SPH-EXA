@@ -211,7 +211,7 @@ main:n2N1:
 #}}}
 
 #{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
-main:n2N2:
+sphexa-cuda:n2N2:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest

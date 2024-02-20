@@ -211,7 +211,7 @@ sph:pull:cuda11:sm60:debug:
 # #}}}
 
 #{{{ sph:test:cuda11:sm60:debug:sphexa-cuda:n1N1:
-main:n1N1:
+sphexa-cuda:n1N1:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
