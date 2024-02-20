@@ -17,14 +17,14 @@ sph:pull:cuda11:sm60:debug:
     # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_DEBUG}"
 #}}}
 
-    #{{{ sph:test:cuda11:sm60:debug:domain:1:
+#{{{ sph:test:cuda11:sm60:debug:domain:1:
 sph:test:cuda11:sm60:debug:domain:1:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/domain/test/coord_samples/coordinate_test
     - /usr/local/games/build/domain/test/performance/scan_perf
     - /usr/local/games/build/domain/test/unit/component_units
@@ -38,14 +38,14 @@ sph:test:cuda11:sm60:debug:domain:1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:domain:2:
+#{{{ sph:test:cuda11:sm60:debug:domain:2:
 sph:test:cuda11:sm60:debug:domain:2:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/domain/test/integration_mpi/exchange_halos
     - /usr/local/games/build/domain/test/integration_mpi/box_mpi
     - /usr/local/games/build/domain/test/integration_mpi/exchange_focus
@@ -62,17 +62,18 @@ sph:test:cuda11:sm60:debug:domain:2:
     SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 2
     PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:domain:2cn:
+#{{{ sph:test:cuda11:sm60:debug:domain:2cn:
 sph:test:cuda11:sm60:debug:domain:2cn:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/domain/test/integration_mpi/globaloctree
     - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu
   variables:
@@ -81,16 +82,17 @@ sph:test:cuda11:sm60:debug:domain:2cn:
     SLURM_NTASKS: 2
     PULL_IMAGE: 'NO'
     SLURM_PARTITION: 'debug'
+    SLURM_MPI_TYPE: 'pmi2'
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:domain:12:
+#{{{ sph:test:cuda11:sm60:debug:domain:12:
 sph:test:cuda11:sm60:debug:domain:12:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/domain/test/integration_mpi/treedomain
     - /usr/local/games/build/domain/test/integration_mpi/exchange_general
     - /usr/local/games/build/domain/test/integration_mpi/exchange_domain
@@ -100,19 +102,20 @@ sph:test:cuda11:sm60:debug:domain:12:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 12
+    SLURM_MPI_TYPE: 'pmi2'
     PULL_IMAGE: 'NO'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
 
-    #{{{ sph:test:cuda11:sm60:debug:ryoanji:1:
+#{{{ sph:test:cuda11:sm60:debug:ryoanji:1:
 sph:test:cuda11:sm60:debug:ryoanji:1:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/ryoanji_cpu_unit_tests
     - /usr/local/games/build/ryoanji/test/ryoanji_unit_tests # GPU
   variables:
@@ -123,14 +126,14 @@ sph:test:cuda11:sm60:debug:ryoanji:1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:ryoanji:6:
+#{{{ sph:test:cuda11:sm60:debug:ryoanji:6:
 sph:test:cuda11:sm60:debug:ryoanji:6:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/interface/global_forces_gpu
   variables:
     USE_MPI: 'YES'
@@ -138,28 +141,30 @@ sph:test:cuda11:sm60:debug:ryoanji:6:
     SLURM_NTASKS: 6
     PULL_IMAGE: 'NO'
     SLURM_PARTITION: 'debug'
+    SLURM_MPI_TYPE: 'pmi2'
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:ryoanji:10:
-sph:test:cuda11:sm60:debug:ryoanji:10:
+#{{{ sph:test:cuda11:sm60:debug:ryoanji:4:
+sph:test:cuda11:sm60:debug:ryoanji:4:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/ryoanji/test/interface/global_upsweep_cpu
     - /usr/local/games/build/ryoanji/test/interface/global_upsweep_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 10
-    SLURM_NTASKS: 10
+    SLURM_JOB_NUM_NODES: 4
+    SLURM_NTASKS: 4
     PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
 
-    #{{{ sph:test:cuda11:sm60:debug:sph:1:
+#{{{ sph:test:cuda11:sm60:debug:sph:1:
 sph:test:cuda11:sm60:debug:sph:1:
   # ln -fs /usr/local/sbin/hydro/example_data.txt example_data.txt
   needs: ['sph:pull:cuda11:sm60:debug']
@@ -167,7 +172,7 @@ sph:test:cuda11:sm60:debug:sph:1:
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - ln -s /usr/local/games/build/sph/test/example_data.txt .
     - /usr/local/games/build/sph/test/sph_tests
     - /usr/local/games/build/sph/test/hydro_turb/turbulence_tests
@@ -179,14 +184,14 @@ sph:test:cuda11:sm60:debug:sph:1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:main:1:
+#{{{ sph:test:cuda11:sm60:debug:main:1:
 sph:test:cuda11:sm60:debug:main:1:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/main/test/frontend_units
     - /usr/local/games/build/main/test/frontend_units_cuda
   variables:
@@ -197,20 +202,21 @@ sph:test:cuda11:sm60:debug:main:1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-    #{{{ sph:test:cuda11:sm60:debug:main:2:
+#{{{ sph:test:cuda11:sm60:debug:main:2:
 sph:test:cuda11:sm60:debug:main:2:
   needs: ['sph:pull:cuda11:sm60:debug']
   extends: .container-runner-daint-gpu
   stage: SPHtest
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
-    - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - /usr/local/games/build/main/test/mpi/hdf5io
   variables:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 2
     PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
