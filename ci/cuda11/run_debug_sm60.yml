@@ -13,6 +13,7 @@ sph:pull:cuda11:sm60:debug:
     - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
   variables:
     PULL_IMAGE: 'YES'
+    # XDG_DATA_HOME=/dev/shm/$(id -u)
     # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_DEBUG}"
 #}}}
 
@@ -45,7 +46,6 @@ sph:test:cuda11:sm60:debug:domain:2:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-    - /usr/local/games/build/domain/test/integration_mpi/globaloctree
     - /usr/local/games/build/domain/test/integration_mpi/exchange_halos
     - /usr/local/games/build/domain/test/integration_mpi/box_mpi
     - /usr/local/games/build/domain/test/integration_mpi/exchange_focus
@@ -73,6 +73,7 @@ sph:test:cuda11:sm60:debug:domain:2cn:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - /usr/local/games/build/domain/test/integration_mpi/globaloctree
     - /usr/local/games/build/domain/test/integration_mpi/exchange_halos_gpu
   variables:
     USE_MPI: 'YES'
@@ -130,13 +131,13 @@ sph:test:cuda11:sm60:debug:ryoanji:6:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
-    - /usr/local/games/build/ryoanji/test/interface/global_forces_gpu # GPU
+    - /usr/local/games/build/ryoanji/test/interface/global_forces_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 1
+    SLURM_JOB_NUM_NODES: 6
     SLURM_NTASKS: 6
     PULL_IMAGE: 'NO'
-    # SLURM_PARTITION
+    SLURM_PARTITION: 'debug'
     # SLURM_TIMELIMIT    
 #}}}
     #{{{ sph:test:cuda11:sm60:debug:ryoanji:10:
@@ -151,7 +152,7 @@ sph:test:cuda11:sm60:debug:ryoanji:10:
     - /usr/local/games/build/ryoanji/test/interface/global_upsweep_gpu
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 1
+    SLURM_JOB_NUM_NODES: 10
     SLURM_NTASKS: 10
     PULL_IMAGE: 'NO'
     # SLURM_PARTITION
