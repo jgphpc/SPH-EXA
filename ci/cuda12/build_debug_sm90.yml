@@ -3,7 +3,7 @@ include:
 
 sph:build:cuda12:sm90:debug:
   needs: ['sph:base:cuda12']
-  extends: [.container-builder-cscs-gh200, .build]
+  extends: [.container-builder-cscs-gh200, .dynamic-image-name]
     # extends: .container-builder
   stage: SPHbuild
   before_script:

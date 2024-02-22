@@ -2,7 +2,7 @@ include:
   - local: 'ci/common.yml'
 
 sph:base:cuda12:
-  extends: [.container-builder-cscs-gh200, .build]
+  extends: [.container-builder-cscs-gh200, .dynamic-image-name]
     # extends: .container-builder-dynamic-name
   stage: SPHbase
   variables:
