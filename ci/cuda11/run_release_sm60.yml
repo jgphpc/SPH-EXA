@@ -6,15 +6,15 @@ sph:pull:cuda11:sm60:release:
   needs: ['sph:build:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHpull
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
-    - echo "Pulling image=${BUILD_CUDA11_SM60_release}"
+    - echo "Pulling image=${BUILD_CUDA11_SM60_RELEASE}"
     - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
     - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
   variables:
     PULL_IMAGE: 'YES'
     # XDG_DATA_HOME=/dev/shm/$(id -u)
-    # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_release}"
+    # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_RELEASE}"
 #}}}
 
 #{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
@@ -22,7 +22,7 @@ sphexa-cuda:n2N2:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - wget --quiet -O 50c.h5 "https://zenodo.org/records/8369645/files/50c.h5"
     - echo "# --- sedov/gpu"
@@ -52,7 +52,7 @@ domain:n1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - $BUILD_DIR/domain/test/coord_samples/coordinate_test
@@ -75,7 +75,7 @@ domain:n2N1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - echo "$MYTEST"
     - $MYTEST
@@ -98,7 +98,7 @@ domain:n2N2:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - echo "$MYTEST"
     - $MYTEST
@@ -121,7 +121,7 @@ domain:n12N1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - echo "$MYTEST"
     - $MYTEST
@@ -145,7 +145,7 @@ ryoanji:n1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - $BUILD_DIR/ryoanji/test/ryoanji_cpu_unit_tests
     - $BUILD_DIR/ryoanji/test/ryoanji_unit_tests
@@ -163,7 +163,7 @@ ryoanji:n2N2:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   # TODO: explain why sarus hangs with -n>2, it should be run with -n6 or -n10
   script:
     - echo "$MYTEST"
@@ -188,7 +188,7 @@ sph:n1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - ln -s $BUILD_DIR/sph/test/example_data.txt .
     - $BUILD_DIR/sph/test/sph_tests
@@ -208,7 +208,7 @@ main:n1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - $BUILD_DIR/main/test/frontend_units
     - $BUILD_DIR/main/test/frontend_units_cuda
@@ -226,7 +226,7 @@ main:n2N1:
   needs: ['sph:pull:cuda11:sm60:release']
   extends: .container-runner-daint-gpu
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_release}
+  image: ${BUILD_CUDA11_SM60_RELEASE}
   script:
     - $BUILD_DIR/main/test/mpi/hdf5io
   variables:
