@@ -2,7 +2,8 @@ include:
   - local: 'ci/common.yml'
 
 sph:base:cuda12:
-  extends: .container-builder-dynamic-name
+  extends: [.container-builder-cscs-gh200, .build]
+    # extends: .container-builder-dynamic-name
   stage: SPHbase
   variables:
     DOCKERFILE: 'ci/cuda12/Dockerfile_1'
