@@ -63,7 +63,6 @@ RUN echo \
 #}}}
 
 #{{{ hdf5:1.14.3 
-# https://hdf-wordpress-1.s3.amazonaws.com/wp-content/uploads/manual/HDF5/HDF5_1_14_3/src/hdf5-1.14.3.tar.gz
 RUN echo \
     && export VV=1.14.3 \
     && echo "## hdf5:$VV" \
@@ -87,7 +86,10 @@ RUN echo \
     -DHDF5_BUILD_CPP_LIB:BOOL=OFF \
     -DHDF5_BUILD_FORTRAN:BOOL=OFF \
     -DHDF5_BUILD_JAVA:BOOL=OFF \
-    -S hdf5-$VV -B build-hdf5 > /dev/null \
+    -S hdf5-$VV -B build-hdf5 
+    # > /dev/null
+
+RUN echo \
     && cmake --build build-hdf5 -t install -j `grep -c processor /proc/cpuinfo` \
     && ldconfig \
     && cd /usr/local/games \
