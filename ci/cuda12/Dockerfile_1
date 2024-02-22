@@ -1,36 +1,49 @@
-FROM docker.io/nvidia/cuda:12.3.1-base-ubuntu22.04
+FROM docker.io/nvidia/cuda:12.2.2-base-ubuntu22.04
 ENV TZ Europe/Zurich
 
-#{{{ apt: cuda/12.3 + deps 
+#{{{ apt: cuda/12.2 + deps 
 RUN sed -i 's@archive.ubuntu.com@ubuntu.ethz.ch@' /etc/apt/sources.list \
     && echo "## apt:get " \
     && apt update --quiet > /dev/null \
     && apt upgrade -y --quiet > /dev/null \
     && DEBIAN_FRONTEND=noninteractive \
        apt install -y --quiet --no-install-recommends \
-       cuda-nvcc-12-3 libcublas-dev-12-3 \
+       cuda-nvcc-12-2 libcublas-dev-12-2 \
+       gcc-12 g++-12 \
        pkg-config libtbb-dev zlib1g-dev git file wget vim-tiny \
        autoconf automake libtool \
        python-is-python3 \
        python3-pip libpython3-dev python3-numpy python3-matplotlib > /dev/null \
     && echo "## apt:clean " \
-    && apt clean autoremove
+    && apt clean autoremove \
+    && mkdir -p /usr/local/games/bin \
+    && cd /usr/local/games/bin \
+    && ln -fs /usr/bin/cpp-12 cpp \
+    && ln -fs /usr/bin/g++-12 g++ \
+    && ln -fs /usr/bin/gcc-12 gcc
+#}}}
+
+#{{{ SRC
+RUN echo "getting src" \
+    && mkdir -p /usr/local/games/SRC \
+    && cd /usr/local/games/SRC \
+    && wget --quiet https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3-linux-aarch64.tar.gz \
+    && wget --quiet https://www.mpich.org/static/downloads/4.2.0/mpich-4.2.0.tar.gz \
+    && wget --quiet https://hdf-wordpress-1.s3.amazonaws.com/wp-content/uploads/manual/HDF5/HDF5_1_14_3/src/hdf5-1.14.3.tar.gz
 #}}}
 
 #{{{ cmake:3.28.3 
-# https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3-linux-x86_64.tar.gz
 RUN echo \
     && export VV=3.28.3 VVshort=3.28 \
     && echo "## cmake:$VV" \
     && cd /usr/local/games \
-    && tar xf SRC/cmake-$VV-linux-x86_64.tar.gz \
-    && cp -a cmake-$VV-linux-x86_64/bin/* /usr/bin/ \
-    && cp -a cmake-$VV-linux-x86_64/share/cmake-$VVshort /usr/share/cmake-$VVshort \
-    && rm -fr cmake-$VV-linux-x86_64
+    && tar xf SRC/cmake-$VV-linux-aarch64.tar.gz \
+    && cp -a cmake-$VV-linux-aarch64/bin/* /usr/bin/ \
+    && cp -a cmake-$VV-linux-aarch64/share/cmake-$VVshort /usr/share/cmake-$VVshort \
+    && rm -fr cmake-$VV-linux-aarch64
 #}}}
 
 #{{{ mpich:4.2.0 
-# https://www.mpich.org/static/downloads/4.2.0/mpich-4.2.0.tar.gz
 RUN echo \
     && cd /usr/local/games \
     && export VV=4.2.0 \
