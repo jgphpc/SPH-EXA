@@ -4,7 +4,7 @@ include:
 #{{{ sph:pull:cuda12:sm90:debug:
 sph:pull:cuda12:sm90:debug:
   needs: ['sph:build:cuda12:sm90:debug']
-  extends: .santis-container-runner
+  extends: santis-container-runner
   # no: .container-runner-santis-gh200
   stage: SPHpull
   image: ${BUILD_CUDA12_SM90_DEBUG}
