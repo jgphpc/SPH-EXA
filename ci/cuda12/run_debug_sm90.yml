@@ -1,28 +1,28 @@
 include:
   - local: 'ci/common.yml'
 
-#{{{ sph:pull:cuda11:sm60:release:
-sph:pull:cuda11:sm60:release:
-  needs: ['sph:build:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+#{{{ sph:pull:cuda12:sm90:debug:
+sph:pull:cuda12:sm90:debug:
+  needs: ['sph:build:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHpull
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
-    - echo "Pulling image=${BUILD_CUDA11_SM60_RELEASE}"
+    - echo "Pulling image=${BUILD_CUDA12_SM90_DEBUG}"
     - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
     - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
   variables:
     PULL_IMAGE: 'YES'
     # XDG_DATA_HOME=/dev/shm/$(id -u)
-    # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_RELEASE}"
+    # PERSIST_IMAGE_NAME: "${BUILD_CUDA12_SM90_DEBUG}"
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
-sphexa-cuda:n2N2:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+#{{{ sph:test:cuda12:sm90:debug:sphexa-cuda:n1N1:
+sphexa-cuda:n1N1:
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - wget --quiet -O 50c.h5 "https://zenodo.org/records/8369645/files/50c.h5"
     - echo "# --- sedov/gpu"
@@ -32,14 +32,14 @@ sphexa-cuda:n2N2:
     - python3 $BUILD_DIR/../SPH-EXA.git/main/src/analytical_solutions/compare_solutions.py 
       -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt
     - cat /scratch/sedov.rpt
-    # - echo "Warning -n2"
+    - echo "Warning -n2 fails in domain/include/cstone/domain/buffer_description.hpp/212"
     - pwd
     - ls -la
-    - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
+      # TODO: - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
   variables:
     USE_MPI: 'YES'
-    SLURM_JOB_NUM_NODES: 2
-    SLURM_NTASKS: 2
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
     SLURM_NTASKS_PER_NODE: 1
     PULL_IMAGE: 'NO'
     SLURM_MPI_TYPE: 'pmi2'
@@ -47,12 +47,12 @@ sphexa-cuda:n2N2:
     # SLURM_TIMELIMIT    
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:domain:n1:
+#{{{ sph:test:cuda12:sm90:debug:domain:n1:
 domain:n1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
     - $BUILD_DIR/domain/test/coord_samples/coordinate_test
@@ -70,12 +70,12 @@ domain:n1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:release:domain:n2N1:
+#{{{ sph:test:cuda12:sm90:debug:domain:n2N1:
 domain:n2N1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - echo "$MYTEST"
     - $BUILD_DIR/$MYTEST
@@ -92,12 +92,12 @@ domain:n2N1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:release:domain:n2N2:
+#{{{ sph:test:cuda12:sm90:debug:domain:n2N2:
 domain:n2N2:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - echo "$MYTEST"
     - $BUILD_DIR/$MYTEST
@@ -114,12 +114,12 @@ domain:n2N2:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:release:domain:n12N1:
+#{{{ sph:test:cuda12:sm90:debug:domain:n12N1:
 domain:n12N1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - echo "$MYTEST"
     - $BUILD_DIR/$MYTEST
@@ -137,12 +137,12 @@ domain:n12N1:
     # SLURM_TIMELIMIT    
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:ryoanji:n1:
+#{{{ sph:test:cuda12:sm90:debug:ryoanji:n1:
 ryoanji:n1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - $BUILD_DIR/ryoanji/test/ryoanji_cpu_unit_tests
     - $BUILD_DIR/ryoanji/test/ryoanji_unit_tests
@@ -155,12 +155,12 @@ ryoanji:n1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:release:ryoanji:n2N2:
+#{{{ sph:test:cuda12:sm90:debug:ryoanji:n2N2:
 ryoanji:n2N2:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   # TODO: explain why sarus hangs with -n>2, it should be run with -n6 or -n10
   script:
     - echo "$MYTEST"
@@ -179,12 +179,12 @@ ryoanji:n2N2:
     # SLURM_TIMELIMIT    
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:sph:n1:
+#{{{ sph:test:cuda12:sm90:debug:sph:n1:
 sph:n1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - ln -s $BUILD_DIR/sph/test/example_data.txt .
     - $BUILD_DIR/sph/test/sph_tests
@@ -199,12 +199,12 @@ sph:n1:
     # SLURM_TIMELIMIT    
 #}}}
 
-#{{{ sph:test:cuda11:sm60:release:main:n1:
+#{{{ sph:test:cuda12:sm90:debug:main:n1:
 main:n1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - $BUILD_DIR/main/test/frontend_units
     - $BUILD_DIR/main/test/frontend_units_cuda
@@ -217,12 +217,12 @@ main:n1:
     # SLURM_PARTITION
     # SLURM_TIMELIMIT    
 #}}}
-#{{{ sph:test:cuda11:sm60:release:main:n2N1:
+#{{{ sph:test:cuda12:sm90:debug:main:n2N1:
 main:n2N1:
-  needs: ['sph:pull:cuda11:sm60:release']
-  extends: .container-runner-daint-gpu
+  needs: ['sph:pull:cuda12:sm90:debug']
+  extends: .container-runner-santis-gh200
   stage: SPHtest
-  image: ${BUILD_CUDA11_SM60_RELEASE}
+  image: ${BUILD_CUDA12_SM90_DEBUG}
   script:
     - $BUILD_DIR/main/test/mpi/hdf5io
   variables:

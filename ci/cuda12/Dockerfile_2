@@ -7,7 +7,6 @@ ENV TZ Europe/Zurich
 ENV PATH="${PATH}:/usr/local/cuda/bin"
 ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/cmake:${CMAKE_PREFIX_PATH}"
 # ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/share/cmake:${CMAKE_PREFIX_PATH}"
-# arm -> export CMAKE_PREFIX_PATH=/usr/local/HDF_Group/HDF5/1.14.3/cmake:$CMAKE_PREFIX_PATH
 # git clone --depth=1 https://github.com/unibas-dmi-hpc/SPH-EXA SPH-EXA.git
 COPY . /usr/local/games/SPH-EXA.git
 

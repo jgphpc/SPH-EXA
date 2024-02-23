@@ -78,11 +78,10 @@ domain:n2N1:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "$MYTEST"
-    - $MYTEST
+    - $BUILD_DIR/$MYTEST
   parallel:
     matrix:
-      - MYTEST: ["$BUILD_DIR/domain/test/integration_mpi/globaloctree", "$BUILD_DIR/domain/test/integration_mpi/exchange_halos", "$BUILD_DIR/domain/test/integration_mpi/box_mpi", "$BUILD_DIR/domain/test/integration_mpi/exchange_focus", "$BUILD_DIR/domain/test/integration_mpi/exchange_keys", "$BUILD_DIR/domain/test/integration_mpi/focus_transfer", "$BUILD_DIR/domain/test/integration_mpi/domain_2ranks", "$BUILD_DIR/domain/test/integration_mpi/domain_resize"]
-      # - MYSM: ["sm_60"]
+      - MYTEST: ["domain/test/integration_mpi/globaloctree", "domain/test/integration_mpi/exchange_halos", "domain/test/integration_mpi/box_mpi", "domain/test/integration_mpi/exchange_focus", "domain/test/integration_mpi/exchange_keys", "domain/test/integration_mpi/focus_transfer", "domain/test/integration_mpi/domain_2ranks", "domain/test/integration_mpi/domain_resize"]
   variables:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 1
@@ -101,11 +100,10 @@ domain:n2N2:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "$MYTEST"
-    - $MYTEST
+    - $BUILD_DIR/$MYTEST
   parallel:
     matrix:
-      - MYTEST: ["$BUILD_DIR/domain/test/integration_mpi/exchange_halos_gpu", "$BUILD_DIR/domain/test/integration_mpi/exchange_domain_gpu", "$BUILD_DIR/domain/test/integration_mpi/assignment_gpu", "$BUILD_DIR/domain/test/integration_mpi/domain_gpu"]
-      # - MYSM: ["sm_60"]
+      - MYTEST: ["domain/test/integration_mpi/exchange_halos_gpu", "domain/test/integration_mpi/exchange_domain_gpu", "domain/test/integration_mpi/assignment_gpu", "domain/test/integration_mpi/domain_gpu"]
   variables:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 2
@@ -124,11 +122,10 @@ domain:n12N1:
   image: ${BUILD_CUDA11_SM60_DEBUG}
   script:
     - echo "$MYTEST"
-    - $MYTEST
+    - $BUILD_DIR/$MYTEST
   parallel:
     matrix:
-      - MYTEST: ["$BUILD_DIR/domain/test/integration_mpi/treedomain", "$BUILD_DIR/domain/test/integration_mpi/exchange_general", "$BUILD_DIR/domain/test/integration_mpi/exchange_domain", "$BUILD_DIR/domain/test/integration_mpi/focus_tree", "$BUILD_DIR/domain/test/integration_mpi/domain_nranks"]
-      # - MYSM: ["sm_60"]
+      - MYTEST: ["domain/test/integration_mpi/treedomain", "domain/test/integration_mpi/exchange_general", "domain/test/integration_mpi/exchange_domain", "domain/test/integration_mpi/focus_tree", "domain/test/integration_mpi/domain_nranks"]
   variables:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 1
@@ -167,11 +164,10 @@ ryoanji:n2N2:
   # TODO: explain why sarus hangs with -n>2, it should be run with -n6 or -n10
   script:
     - echo "$MYTEST"
-    - $MYTEST
+    - $BUILD_DIR/$MYTEST
   parallel:
     matrix:
-      - MYTEST: ["$BUILD_DIR/ryoanji/test/interface/global_upsweep_cpu", "$BUILD_DIR/ryoanji/test/interface/global_upsweep_gpu", "$BUILD_DIR/ryoanji/test/interface/global_forces_gpu"]
-      # - MYSM: ["sm_60"]
+      - MYTEST: ["ryoanji/test/interface/global_upsweep_cpu", "ryoanji/test/interface/global_upsweep_gpu", "ryoanji/test/interface/global_forces_gpu"]
   variables:
     USE_MPI: 'YES'
     SLURM_JOB_NUM_NODES: 2
