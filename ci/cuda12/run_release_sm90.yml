@@ -4,7 +4,7 @@ include:
 #{{{ sph:pull:cuda12:sm90:release:
 sph:pull:cuda12:sm90:release:
   needs: ['sph:build:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHpull
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -20,7 +20,7 @@ sph:pull:cuda12:sm90:release:
 #{{{ sph:test:cuda12:sm90:release:sphexa-cuda:n1N1:
 sphexa-cuda:n1N1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -50,7 +50,7 @@ sphexa-cuda:n1N1:release:
 #{{{ sph:test:cuda12:sm90:release:domain:n1:
 domain:n1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -73,7 +73,7 @@ domain:n1:release:
 #{{{ sph:test:cuda12:sm90:release:domain:n2N1:
 domain:n2N1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -95,7 +95,7 @@ domain:n2N1:release:
 #{{{ sph:test:cuda12:sm90:release:domain:n2N2:
 domain:n2N2:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -117,7 +117,7 @@ domain:n2N2:release:
 #{{{ sph:test:cuda12:sm90:release:domain:n12N1:
 domain:n12N1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -140,7 +140,7 @@ domain:n12N1:release:
 #{{{ sph:test:cuda12:sm90:release:ryoanji:n1:
 ryoanji:n1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -158,7 +158,7 @@ ryoanji:n1:release:
 #{{{ sph:test:cuda12:sm90:release:ryoanji:n2N2:
 ryoanji:n2N2:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   # TODO: explain why sarus hangs with -n>2, it should be run with -n6 or -n10
@@ -182,7 +182,7 @@ ryoanji:n2N2:release:
 #{{{ sph:test:cuda12:sm90:release:sph:n1:
 sph:n1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -202,7 +202,7 @@ sph:n1:release:
 #{{{ sph:test:cuda12:sm90:release:main:n1:
 main:n1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
@@ -220,7 +220,7 @@ main:n1:release:
 #{{{ sph:test:cuda12:sm90:release:main:n2N1:
 main:n2N1:release:
   needs: ['sph:pull:cuda12:sm90:release']
-  extends: .container-runner-santis-gh200
+  extends: .santis-container-runner
   stage: SPHtest
   image: ${BUILD_CUDA12_SM90_RELEASE}
   script:
