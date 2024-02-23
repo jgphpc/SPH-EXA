@@ -3,6 +3,9 @@ ENV TZ Europe/Zurich
 
 #{{{ apt: cuda/12.2 + deps 
 RUN sed -i 's@archive.ubuntu.com@ubuntu.ethz.ch@' /etc/apt/sources.list \
+    && export http_proxy="proxy.cscs.ch:8080" \
+    && export https_proxy="proxy.cscs.ch:8080" \
+    && export no_proxy=".local, .cscs.ch, localhost, 148.187.0.0/16, 10.0.0.0/8,172.16.0.0/12" \
     && echo "## apt:get " \
     && apt update --quiet > /dev/null \
     && apt upgrade -y --quiet > /dev/null \
