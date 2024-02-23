@@ -55,7 +55,7 @@ RUN echo \
     && echo "## mpich:$VV:configure" \
     && ./configure --prefix=/usr --disable-fortran --enable-fortran=no > /dev/null \
     && echo "## mpich:$VV:make" \
-    && make --quiet -j `grep -c processor /proc/cpuinfo` install > /dev/null \
+    && make --quiet -j 32 > /dev/null \
     && echo "## mpich:$VV:clean" \
     && cd /usr/local/games \
     && rm -fr mpich-$VV \
