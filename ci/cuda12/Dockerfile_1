@@ -45,9 +45,10 @@ RUN echo \
 
 #{{{ mpich:4.2.0 
 RUN echo \
+    && echo "## mpich:$VV" \
     && cd /usr/local/games \
     && export VV=4.2.0 \
-    && echo "## mpich:$VV" \
+    && export PATH=/usr/local/games/bin:$PATH \
     && tar xf SRC/mpich-$VV.tar.gz \
     && cd mpich-$VV/ \
     && echo "## mpich:$VV:autogen" \
@@ -64,12 +65,14 @@ RUN echo \
 
 #{{{ hdf5:1.14.3 
 RUN echo \
-    && export VV=1.14.3 \
     && echo "## hdf5:$VV" \
+    && export VV=1.14.3 \
+    && export PATH=/usr/local/games/bin:$PATH \
     && cd /usr/local/games \
     && tar xf SRC/hdf5-$VV.tar.gz \
     && cmake \
     -DCMAKE_C_COMPILER:STRING=mpicc \
+    -DCMAKE_CXX_COMPILER:STRING=mpicxx \
     -DCMAKE_C_FLAGS:STRING=-w \
     -DONLY_SHARED_LIBS:BOOL=ON \
     -DHDF5_BUILD_HL_LIB:BOOL=ON \
@@ -86,14 +89,10 @@ RUN echo \
     -DHDF5_BUILD_CPP_LIB:BOOL=OFF \
     -DHDF5_BUILD_FORTRAN:BOOL=OFF \
     -DHDF5_BUILD_JAVA:BOOL=OFF \
-    -S hdf5-$VV -B build-hdf5 
-    # > /dev/null
-
-RUN echo \
-    && cmake --build build-hdf5 -t install -j `grep -c processor /proc/cpuinfo` \
+    -S hdf5-$VV -B /usr/local/games/build-hdf5 \
+    && cmake --build /usr/local/games/build-hdf5 -t install -j 64 \
     && ldconfig \
-    && cd /usr/local/games \
-    && rm -fr hdf5-$VV build-hdf5
+    && rm -fr /usr/local/games/hdf5-$VV /usr/local/games/build-hdf5
 #}}}
 
 #{{{ analytical_solutions: 
