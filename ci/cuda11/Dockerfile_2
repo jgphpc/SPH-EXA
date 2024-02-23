@@ -1,0 +1,51 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+ARG CUDA_SM
+ARG BUILD_TYPE
+
+ENV TZ Europe/Zurich
+ENV PATH="${PATH}:/usr/local/cuda/bin"
+ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/share/cmake:${CMAKE_PREFIX_PATH}"
+COPY . /usr/local/games/SPH-EXA.git
+
+#{{{ build
+RUN echo \
+    && echo "## cmake -B:sm_${CUDA_SM}" \
+    && date \
+    && which nvcc \
+    && nvcc --version \
+    && cd /usr/local/games/SPH-EXA.git/ \
+    && ls -la . \
+    && cd /usr/local/games \
+    && export CMAKE_PREFIX_PATH=/usr/local/HDF_Group/HDF5/1.14.3/cmake:$CMAKE_PREFIX_PATH \
+    && cmake -S SPH-EXA.git -B build \
+    -DCMAKE_CXX_COMPILER=mpicxx \
+    -DCMAKE_C_COMPILER=mpicc \
+    -DBUILD_TESTING=ON \
+    -DBUILD_ANALYTICAL=ON \
+    -DSPH_EXA_WITH_H5PART=ON \
+    -DGPU_DIRECT=OFF \
+    -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
+    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+    && echo "## cmake --build:" \
+    && cmake --build build -j `grep -c processor /proc/cpuinfo` \
+#    -DCMAKE_CUDA_FLAGS='-arch=sm_60' \
+#     && cmake --install build \
+#     && cp SPH-EXA.git/.gitlab/rfm.py /usr/local/games/rfm.py \
+    && echo
+#    && ls /usr/local/sbin
+#    -DSPH_EXA_WITH_HIP=OFF \
+#     -DCMAKE_CXX_FLAGS_DEBUG="-g -w" \
+#     #
+#     -DGPU_DIRECT=OFF \
+#     -DCMAKE_BUILD_TYPE=Debug \
+#     #
+#     -DGPU_DIRECT=OFF \
+#     -DCMAKE_BUILD_TYPE=Release \
+#     #
+#     -DGPU_DIRECT=ON \
+#     -DCMAKE_BUILD_TYPE=Debug \
+#     #
+#     -DGPU_DIRECT=ON \
+#     -DCMAKE_BUILD_TYPE=Release \
+#}}}

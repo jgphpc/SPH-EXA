@@ -1,0 +1,20 @@
+include:
+  - local: 'ci/common.yml'
+
+sph:build:cuda12:sm90:release:
+  needs: ['sph:base:cuda12']
+  extends: [.container-builder-cscs-gh200, .dynamic-image-name]
+    # extends: .container-builder
+  stage: SPHbuild
+  before_script:
+    - echo "IN=DOCKERFILE=$DOCKERFILE"
+    - echo "OUT=PERSIST_IMAGE_NAME=$PERSIST_IMAGE_NAME"
+  variables:
+    JG: 'YES'
+    DOCKERFILE: 'ci/cuda12/Dockerfile_2'
+    PERSIST_IMAGE_NAME: "${BUILD_CUDA12_SM90_RELEASE}"
+    DOCKER_BUILD_ARGS: '[
+        "BASE_IMAGE=$BASE_IMAGE",
+        "CUDA_SM=90",
+        "BUILD_TYPE=Release"
+      ]'

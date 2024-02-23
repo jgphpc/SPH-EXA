@@ -1,0 +1,11 @@
+include:
+  - local: 'ci/common.yml'
+
+sph:base:cuda12:
+  extends: [.container-builder-cscs-gh200, .dynamic-image-name]
+    # extends: .container-builder-dynamic-name
+  stage: SPHbase
+  variables:
+    DOCKERFILE: 'ci/cuda12/Dockerfile_1'
+    WATCH_FILECHANGES: 'ci/cuda12/Dockerfile_1'
+    PERSIST_IMAGE_NAME: "${CSCS_REGISTRY_PATH}/base/sph-exa_base-cuda12"

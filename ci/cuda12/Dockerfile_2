@@ -1,0 +1,36 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+ARG CUDA_SM
+ARG BUILD_TYPE
+
+ENV TZ Europe/Zurich
+ENV PATH="${PATH}:/usr/local/cuda/bin"
+ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/cmake:${CMAKE_PREFIX_PATH}"
+# ENV CMAKE_PREFIX_PATH="/usr/local/HDF_Group/HDF5/1.14.3/share/cmake:${CMAKE_PREFIX_PATH}"
+# git clone --depth=1 https://github.com/unibas-dmi-hpc/SPH-EXA SPH-EXA.git
+COPY . /usr/local/games/SPH-EXA.git
+
+#{{{ build
+RUN echo \
+    && echo "## cmake -B:sm_${CUDA_SM}" \
+    && date \
+    && which nvcc \
+    && nvcc --version \
+    && cd /usr/local/games/SPH-EXA.git/ \
+    && ls -la . \
+    && cd /usr/local/games \
+    && export CMAKE_PREFIX_PATH=/usr/local/HDF_Group/HDF5/1.14.3/cmake:$CMAKE_PREFIX_PATH \
+    && export PATH=/usr/local/games/bin:$PATH \
+    && cmake -S SPH-EXA.git -B build \
+    -DCMAKE_CXX_COMPILER=mpicxx \
+    -DCMAKE_C_COMPILER=mpicc \
+    -DBUILD_TESTING=ON \
+    -DBUILD_ANALYTICAL=ON \
+    -DSPH_EXA_WITH_H5PART=ON \
+    -DGPU_DIRECT=OFF \
+    -DCMAKE_CUDA_ARCHITECTURES=${CUDA_SM} \
+    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+    && echo "## cmake --build:" \
+    && cmake --build build -j `grep -c processor /proc/cpuinfo` \
+    && echo
+#}}}

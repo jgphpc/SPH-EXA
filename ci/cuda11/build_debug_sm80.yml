@@ -1,0 +1,19 @@
+include:
+  - local: 'ci/common.yml'
+
+sph:build:cuda11:sm80:debug:
+  needs: ['sph:base:cuda11']
+  extends: .container-builder
+  stage: SPHbuild
+  before_script:
+    - echo "IN=DOCKERFILE=$DOCKERFILE"
+    - echo "OUT=PERSIST_IMAGE_NAME=$PERSIST_IMAGE_NAME"
+  variables:
+    JG: 'YES'
+    DOCKERFILE: 'ci/cuda11/Dockerfile_2'
+    PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM80_DEBUG}"
+    DOCKER_BUILD_ARGS: '[
+        "BASE_IMAGE=$BASE_IMAGE",
+        "CUDA_SM=80",
+        "BUILD_TYPE=Debug"
+      ]'

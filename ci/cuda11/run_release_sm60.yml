@@ -1,0 +1,237 @@
+include:
+  - local: 'ci/common.yml'
+
+#{{{ sph:pull:cuda11:sm60:release:
+sph:pull:cuda11:sm60:release:
+  needs: ['sph:build:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHpull
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - echo "Pulling image=${BUILD_CUDA11_SM60_RELEASE}"
+    - echo "  CSCS_REGISTRY_PATH=${CSCS_REGISTRY_PATH}"
+    - echo "  PERSIST_IMAGE_NAME=${PERSIST_IMAGE_NAME}"
+  variables:
+    PULL_IMAGE: 'YES'
+    # XDG_DATA_HOME=/dev/shm/$(id -u)
+    # PERSIST_IMAGE_NAME: "${BUILD_CUDA11_SM60_RELEASE}"
+#}}}
+
+#{{{ sph:test:cuda11:sm60:release:sphexa-cuda:n2N2:
+sphexa-cuda:n2N2:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - wget --quiet -O 50c.h5 "https://zenodo.org/records/8369645/files/50c.h5"
+    - echo "# --- sedov/gpu"
+    - ln -fs $BUILD_DIR/main/src/analytical_solutions/sedov_solution/sedov_solution .
+    - ${BUILD_DIR}/main/src/sphexa/sphexa-cuda --init sedov --glass ./50c.h5 
+      -s 200 -n 50 -w 200 -f x,y,z,h,m,p,rho,vx,vy,vz,temp -o /scratch/out_sedov.h5 --quiet
+    - python3 $BUILD_DIR/../SPH-EXA.git/main/src/analytical_solutions/compare_solutions.py 
+      -s 200 /scratch/out_sedov.h5 > /scratch/sedov.rpt
+    - cat /scratch/sedov.rpt
+    # - echo "Warning -n2"
+    - pwd
+    - ls -la
+    - reframe -c $BUILD_DIR/../SPH-EXA.git/ci/rfm.py -r -S rpt_path=/scratch
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
+#{{{ sph:test:cuda11:sm60:release:domain:n1:
+domain:n1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    # - echo "SLURMD_NODENAME=${SLURMD_NODENAME} SLURM_NODEID=${SLURM_NODEID} SLURM_PROCID=${SLURM_PROCID}"
+    - $BUILD_DIR/domain/test/coord_samples/coordinate_test
+    - $BUILD_DIR/domain/test/performance/scan_perf
+    - $BUILD_DIR/domain/test/unit/component_units
+    - $BUILD_DIR/domain/test/unit/component_units_omp
+    - $BUILD_DIR/domain/test/unit_cuda/component_units_cuda
+    - $BUILD_DIR/domain/test/integration_mpi/domain_gpu
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:release:domain:n2N1:
+domain:n2N1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - echo "$MYTEST"
+    - $BUILD_DIR/$MYTEST
+  parallel:
+    matrix:
+      - MYTEST: ["domain/test/integration_mpi/globaloctree", "domain/test/integration_mpi/exchange_halos", "domain/test/integration_mpi/box_mpi", "domain/test/integration_mpi/exchange_focus", "domain/test/integration_mpi/exchange_keys", "domain/test/integration_mpi/focus_transfer", "domain/test/integration_mpi/domain_2ranks", "domain/test/integration_mpi/domain_resize"]
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 2
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:release:domain:n2N2:
+domain:n2N2:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - echo "$MYTEST"
+    - $BUILD_DIR/$MYTEST
+  parallel:
+    matrix:
+      - MYTEST: ["domain/test/integration_mpi/exchange_halos_gpu", "domain/test/integration_mpi/exchange_domain_gpu", "domain/test/integration_mpi/assignment_gpu", "domain/test/integration_mpi/domain_gpu"]
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:release:domain:n12N1:
+domain:n12N1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - echo "$MYTEST"
+    - $BUILD_DIR/$MYTEST
+  parallel:
+    matrix:
+      - MYTEST: ["domain/test/integration_mpi/treedomain", "domain/test/integration_mpi/exchange_general", "domain/test/integration_mpi/exchange_domain", "domain/test/integration_mpi/focus_tree", "domain/test/integration_mpi/domain_nranks"]
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 12
+    SLURM_NTASKS_PER_NODE: 12
+    SLURM_MPI_TYPE: 'pmi2'
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
+#{{{ sph:test:cuda11:sm60:release:ryoanji:n1:
+ryoanji:n1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - $BUILD_DIR/ryoanji/test/ryoanji_cpu_unit_tests
+    - $BUILD_DIR/ryoanji/test/ryoanji_unit_tests
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:release:ryoanji:n2N2:
+ryoanji:n2N2:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  # TODO: explain why sarus hangs with -n>2, it should be run with -n6 or -n10
+  script:
+    - echo "$MYTEST"
+    - $BUILD_DIR/$MYTEST
+  parallel:
+    matrix:
+      - MYTEST: ["ryoanji/test/interface/global_upsweep_cpu", "ryoanji/test/interface/global_upsweep_gpu", "ryoanji/test/interface/global_forces_gpu"]
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 2
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    SLURM_PARTITION: 'normal'
+    # SLURM_TIMELIMIT    
+#}}}
+
+#{{{ sph:test:cuda11:sm60:release:sph:n1:
+sph:n1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - ln -s $BUILD_DIR/sph/test/example_data.txt .
+    - $BUILD_DIR/sph/test/sph_tests
+    - $BUILD_DIR/sph/test/hydro_turb/turbulence_tests
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+
+#{{{ sph:test:cuda11:sm60:release:main:n1:
+main:n1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - $BUILD_DIR/main/test/frontend_units
+    - $BUILD_DIR/main/test/frontend_units_cuda
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+    SLURM_NTASKS_PER_NODE: 1
+    PULL_IMAGE: 'NO'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
+#{{{ sph:test:cuda11:sm60:release:main:n2N1:
+main:n2N1:
+  needs: ['sph:pull:cuda11:sm60:release']
+  extends: .container-runner-daint-gpu
+  stage: SPHtest
+  image: ${BUILD_CUDA11_SM60_RELEASE}
+  script:
+    - $BUILD_DIR/main/test/mpi/hdf5io
+  variables:
+    USE_MPI: 'YES'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 2
+    SLURM_NTASKS_PER_NODE: 2
+    PULL_IMAGE: 'NO'
+    SLURM_MPI_TYPE: 'pmi2'
+    # SLURM_PARTITION
+    # SLURM_TIMELIMIT    
+#}}}
