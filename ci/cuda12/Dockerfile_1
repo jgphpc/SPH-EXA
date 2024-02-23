@@ -51,11 +51,11 @@ RUN echo \
     && tar xf SRC/mpich-$VV.tar.gz \
     && cd mpich-$VV/ \
     && echo "## mpich:$VV:autogen" \
-    && ./autogen.sh -yaksa-depth=1 \
+    && ./autogen.sh -yaksa-depth=1 > /dev/null \
     && echo "## mpich:$VV:configure" \
     && ./configure --prefix=/usr --disable-fortran --enable-fortran=no > /dev/null \
     && echo "## mpich:$VV:make" \
-    && make --quiet -j 32 > /dev/null \
+    && make --quiet -j 32 install > /dev/null \
     && echo "## mpich:$VV:clean" \
     && cd /usr/local/games \
     && rm -fr mpich-$VV \
