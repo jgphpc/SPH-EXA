@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/jgphpc/SPH-EXA,6,3
+/jgphpc/SPH-EXA/tree/ci_update/ci/cuda12,4,2
+/jgphpc/SPH-EXA/blob/ci_update/ci/cuda12/run_debug_sm90.yml,3,2
+/jgphpc/SPH-EXA/blob/ci_update/ci/cuda12/Dockerfile_2,2,2
+/jgphpc/SPH-EXA/tree/ci_update,2,2
+/jgphpc/SPH-EXA/blob/ci_update/ci/common.yml,2,1
+/jgphpc/SPH-EXA/blob/ci_update/ci/cscs.yml,2,1
+/jgphpc/SPH-EXA/blob/ci_update/ci/cuda12/build_debug_sm90.yml,2,1
+/jgphpc/SPH-EXA/branches/all,2,1
+/jgphpc/SPH-EXA/tree/ci_update/ci,2,1
