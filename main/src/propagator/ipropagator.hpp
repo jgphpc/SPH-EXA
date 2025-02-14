@@ -128,15 +128,16 @@ public:
         {
             out << ", maxStackNc " << d.devData.stackUsedNc << ", maxStackGravity " << d.devData.stackUsedGravity;
         }
-        // ascent
+        out << "\n\n=== Total time for iteration(" << d.iteration << ") " << timer.sumOfSteps() << "s\n\n";
+        // --- ascent
         typedef std::chrono::high_resolution_clock Clock;
         auto now_a = Clock::now();
-        std::time_t now_time = std::chrono::system_clock::to_time_t(now_a); // now2time
-        std::tm *now_tm = std::localtime(&now_time); // time2stdtim
-        out << "\n#ascent " << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S %Z") << std::endl;
-        // === Total time for iteration(6) 0.201252s
-        // ascent
-        out << "=== Total time for iteration(" << d.iteration << ") " << timer.sumOfSteps() << "s\n\n";
+        std::time_t now_a_time = std::chrono::system_clock::to_time_t(now_a); // now2time
+        std::tm *now_a_tm = std::localtime(&now_a_time); // time2stdtime
+        auto now_a_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now_a.time_since_epoch()) % 1000;
+        out << "# ascent_t0 " << std::put_time(now_a_tm, "%Y-%m-%d %H:%M:%S") 
+            << "." << std::setfill('0') << std::setw(3) << now_a_ms.count() << std::endl;
+        // --- ascent
     }
 
 protected:

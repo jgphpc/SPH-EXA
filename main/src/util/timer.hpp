@@ -48,8 +48,21 @@ public:
     {
         auto now = Clock::now();
         stepTimes.push_back(stepDuration(now));
-        if (!name.empty()) { out << "# " << name << ": " << stepTimes.back() << "s" << std::endl; }
+        if (!name.empty()) {
+            if (name == "domain::sync") {
+                // --- ascent
+                auto now_a = Clock::now();
+                std::time_t now_a_time = std::chrono::system_clock::to_time_t(now_a); // now2time
+                std::tm *now_a_tm = std::localtime(&now_a_time); // time2stdtime
+                auto now_a_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now_a.time_since_epoch()) % 1000;
+                out << "# ascent_t1 " << std::put_time(now_a_tm, "%Y-%m-%d %H:%M:%S") 
+                    << "." << std::setfill('0') << std::setw(3) << now_a_ms.count() << std::endl;
+                // --- ascent
+            }
+            out << "# " << name << ": " << stepTimes.back() << "s" << std::endl;
+        }
         tlast = now;
+
     }
 
     //! @brief time elapsed between tstart and last call of step()
