@@ -1,0 +1,10 @@
+# An example to do I/O once every N timesteps
+# restrict the variables being saved, and aggregate I/O to N files/step
+# https://ascent.readthedocs.io/en/latest/Actions/Examples.html
+- 
+  action: add_triggers
+  triggers: 
+    t0:
+      params: 
+        actions_file: "vector_field_ops.yaml"
+        condition: "cycle() % 25 == 0"
