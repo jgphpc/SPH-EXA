@@ -124,18 +124,18 @@ void Execute(DataType& d, long startIndex, long endIndex)
     addField(mesh, "vx", get<"vx">(d).data(), startIndex, endIndex);
     addField(mesh, "vy", get<"vy">(d).data(), startIndex, endIndex);
     addField(mesh, "vz", get<"vz">(d).data(), startIndex, endIndex);
-    addField(mesh, "kx", get<"kx">(d).data(), startIndex, endIndex);
-    addField(mesh, "xm", get<"xm">(d).data(), startIndex, endIndex);
+//    addField(mesh, "kx", get<"kx">(d).data(), startIndex, endIndex);
+//    addField(mesh, "xm", get<"xm">(d).data(), startIndex, endIndex);
     addField(mesh, "Temperature", get<"temp">(d).data(), startIndex, endIndex);
-    addField(mesh, "Mass", get<"m">(d).data(), startIndex, endIndex);
-    addField(mesh, "Smoothing Length", get<"h">(d).data(), startIndex, endIndex);
-    addField(mesh, "Density", get<"rho">(d).data(), startIndex, endIndex);
-    addField(mesh, "Internal Energy", get<"u">(d).data(), startIndex, endIndex);
-    addField(mesh, "Pressure", get<"p">(d).data(), startIndex, endIndex);
-    addField(mesh, "Speed of Sound", get<"c">(d).data(), startIndex, endIndex);
-    addField(mesh, "ax", get<"ax">(d).data(), startIndex, endIndex);
-    addField(mesh, "ay", get<"ay">(d).data(), startIndex, endIndex);
-    addField(mesh, "az", get<"az">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Mass", get<"m">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Smoothing Length", get<"h">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Density", get<"rho">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Internal Energy", get<"u">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Pressure", get<"p">(d).data(), startIndex, endIndex);
+//    addField(mesh, "Speed of Sound", get<"c">(d).data(), startIndex, endIndex);
+//    addField(mesh, "ax", get<"ax">(d).data(), startIndex, endIndex);
+//    addField(mesh, "ay", get<"ay">(d).data(), startIndex, endIndex);
+//    addField(mesh, "az", get<"az">(d).data(), startIndex, endIndex);
 
     conduit::Node verify_info;
     if (!conduit::blueprint::mesh::verify(mesh, verify_info))

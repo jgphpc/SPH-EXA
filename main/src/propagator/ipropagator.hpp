@@ -40,6 +40,7 @@
 #include "sph/particles_data.hpp"
 #include "util/pm_reader.hpp"
 #include "util/timer.hpp"
+//#include <chrono>
 
 namespace sphexa
 {
@@ -127,7 +128,15 @@ public:
         {
             out << ", maxStackNc " << d.devData.stackUsedNc << ", maxStackGravity " << d.devData.stackUsedGravity;
         }
-        out << "\n=== Total time for iteration(" << d.iteration << ") " << timer.sumOfSteps() << "s\n\n";
+        // ascent
+        typedef std::chrono::high_resolution_clock Clock;
+        auto now_a = Clock::now();
+        std::time_t now_time = std::chrono::system_clock::to_time_t(now_a); // now2time
+        std::tm *now_tm = std::localtime(&now_time); // time2stdtim
+        out << "\n#ascent " << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S %Z") << std::endl;
+        // === Total time for iteration(6) 0.201252s
+        // ascent
+        out << "=== Total time for iteration(" << d.iteration << ") " << timer.sumOfSteps() << "s\n\n";
     }
 
 protected:
