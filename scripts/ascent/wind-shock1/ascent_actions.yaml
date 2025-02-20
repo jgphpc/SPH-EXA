@@ -7,4 +7,4 @@
     t0:
       params: 
         actions_file: "vector_field_ops.yaml"
-        condition: "cycle() % 25 == 0"
+        condition: "cycle() % 5 == 0"

@@ -1,0 +1,40 @@
+#!/bin/bash
+#SBATCH --nodes=NNN
+#SBATCH --ntasks-per-node=4
+#SBATCH -c 72
+#SBATCH --exclusive
+#SBATCH --time=00:30:00
+#SBATCH --uenv=paraview/5.13.2:v1:/user-environment
+#SBATCH --view=develop
+#SBATCH --output=oo.cnNNN.sizeSSS
+#SBATCH --error=oo.cnNNN.sizeSSS
+##SBATCH --partition=debug
+##SBATCH --account=csstaff
+export OMP_NUM_THREADS=64
+TOPD=/capstor/scratch/cscs/piccinal/santis/jf/sph
+cp $TOPD/50c.h5 .
+cp $TOPD/select_local_device.sh . 
+cp $TOPD/ascent_actions.yaml .
+cp $TOPD/vector_field_ops.yaml .
+without=$TOPD/build+sphexa-ascent/main/src/sphexa/sphexa-cuda
+with=$TOPD/build+sphexa+ascent/main/src/sphexa/sphexa-cuda
+rm -f dump_wind-shock.h5
+mkdir -p datasets
+NSYS='/capstor/scratch/cscs/piccinal/daint/nvidia/nsight-systems-2025.1.1/bin/nsys profile --trace=mpi,cuda --force-overwrite=true --mpi-impl=mpich --cuda-memory-usage=true --sample=none'
+NSYSRPT='-o ascent-.%p.%n' # .nsys-rep
+# --export=sqlite
+srun $NSYS $NSYSRPT ./select_local_device.sh $without --init wind-shock -s 21 -n SSS --glass 50c.h5
+
+NSYS='/capstor/scratch/cscs/piccinal/daint/nvidia/nsight-systems-2025.1.1/bin/nsys profile --trace=mpi,cuda --force-overwrite=true --mpi-impl=mpich --cuda-memory-usage=true --sample=none'
+NSYSRPT='-o ascent+.%p.%n' # .nsys-rep
+srun $NSYS $NSYSRPT ./select_local_device.sh $with --init wind-shock -s 21 -n SSS --glass 50c.h5
+
+rm -f 50c.h5 select_local_device.sh 
+
+# uenv image add paraview/5.13.2:v1@santis%gh200 /capstor/scratch/cscs/piccinal/.uenv-images/images/e3c457f93c432e3f68ee7a3ac50e5b50e50438fcddea4e3b109a294d30b0b065/store.squashfs
+
+# --- nvidia-smi
+# nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,gpu_bus_id --format=csv --loop-ms=500 &> o.without.rpt.620 &
+# nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,gpu_bus_id --format=csv --loop=1 &> o.without.rpt.620 &
+# srun ...
+# sleep 2 ;ps x |grep nvidia-smi |grep -v grep |awk '{print "kill "$1}' |sh
