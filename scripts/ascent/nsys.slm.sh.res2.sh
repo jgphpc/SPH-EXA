@@ -22,14 +22,21 @@ if [ -f $in ] ;then
         echo '$dir;$in;$testname;$np_global;$steps;$mpi;$omp;$ntasks_per_node;$nodes;$elapsed'
     fi
     ntasks_per_node=`grep ntasks-per-node= *.slm |cut -d= -f2`
+    # i/o
+    if [ -f dump_wind-shock.h5.txt ] ;then
+        iobytes=`grep dump_wind-shock.h5 dump_wind-shock.h5.txt |awk '{print $5}'`
+        ioGbytes=`echo $iobytes |awk '{print $0/1024^3}'`
+        iosteps=`grep ^Step dump_wind-shock.h5.txt |wc -l`
+    fi
     # cubeside=
     # uenv=
-    #
-    echo "$(basename `pwd`);$in;$testname;$np_global;$steps;$mpi;$omp;$ntasks_per_node;$nodes;$elapsed"
+    # --- i/o checkpoint: x,y,z, vx,vy,vz, alpha, du_m1, h, m, temp, x_m1, y_m1, z_m1
+    # echo "$(basename `pwd`);$in;test=$testname;np=$np_global;s=$steps;mpi=$mpi;omp=$omp;npcn=$ntasks_per_node;cn=$nodes;sec=$elapsed ; debug"
+    echo "$(basename `pwd`);$in;$testname;$np_global;$steps;$mpi;$omp;$ntasks_per_node;$nodes;$elapsed;$iobytes;$ioGbytes;$iosteps"
     # |awk '{printf "%s;%s;%s;%s;%s;%s;%s;%s;%s",$1,$2,$3,$4,$5,$6,$7,$8,$9}'
 else
-    echo "$(basename `pwd`);$in;$testname;$np_global;$steps;$mpi;$omp;$ntasks_per_node;$nodes;$elapsed"
-    # echo "in=$in not found"
+    echo "$(basename `pwd`);$in;$testname;$np_global;$steps;$mpi;$omp;$ntasks_per_node;$nodes;$elapsed;$iobytes;$ioGbytes;$iosteps"
+    echo "in=$in not found"
 fi
 
 fi
