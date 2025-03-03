@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# run with 0.slm.in.sh
+
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH -c 1
+#72
+#SBATCH --exclusive
+#SBATCH --time=00:3:00
+#SBATCH --output=oo.cnNNN.sizeCCC
+#SBATCH --error=oo.cnNNN.sizeCCC
+#SBATCH --partition=debug
+##SBATCH --account=csstaff
+##SBATCH --uenv=paraview/5.13.2:v1:/user-environment
+##SBATCH --view=develop
+
+# source /user-environment/env/ascent_gpu/activate.sh
+
+export OMP_NUM_THREADS=1
+#64
+TOPD=/capstor/scratch/cscs/piccinal/santis/jf/sph
+cp $TOPD/50c.h5 .
+cp $TOPD/select_local_device.sh . 
+#cp $TOPD/ascent_actions.yaml .
+#cp $TOPD/vector_field_ops.yaml .
+#without=../build+sphexa-ascent/main/src/sphexa/sphexa-cuda
+#with=..//build+sphexa+ascent/main/src/sphexa/sphexa-cuda
+with=./sphexa-cuda
+rm -f dump_wind-shock.h5
+mkdir -p datasets
+srun $NSYS $NSYSRPT ./select_local_device.sh $with --init wind-shock -s 2 -n 50 --glass 50c.h5 #-w 2

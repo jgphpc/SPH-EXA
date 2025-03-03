@@ -1,0 +1,12 @@
+- 
+  action: "add_scenes"
+  scenes:
+    s1:
+      plots:
+        p1:
+          type: "pseudocolor"
+          field: "Temperature"
+          # OMP_NUM_THREADS=1  ./sphexa-cuda --init wind-shock -s 2 -n 50 --glass 50c.h5
+          # -> s1_01.png, s1_02.png
+- 
+  action: "execute"

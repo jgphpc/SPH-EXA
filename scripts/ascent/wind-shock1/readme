@@ -1,0 +1,9 @@
+
+(s3/p0) unknown field 'Temperature' field names: 'coords', 'vx', 'x', 'y', 'z'
+(s3/p1) unknown field 'Temperature' field names: 'coords', 'vx', 'x', 'y', 'z'
+(pl1/f1/composite/vector) unknown field 'vy' field names: 'coords', 'vx', 'x', 'y', 'z'
+(pl/geometric/clip/f2/log10) unknown field 'Temperature' field names: 'coords', 'vx', 'x', 'y', 'z'
+# Timestep: 36.6267s
+# UpdateQuantities: 0.000138395s
+
+-> check main/src/ascent_adaptor.h
