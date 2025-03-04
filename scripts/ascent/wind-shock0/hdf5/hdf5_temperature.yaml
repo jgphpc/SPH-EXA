@@ -1,0 +1,125 @@
+-
+  action: "add_pipelines"
+  pipelines:
+    pl_geometric_clip: 
+      f1: 
+        type: "clip"
+        params: 
+          invert: "true" # "false" removes all particles in the negative zone of "normal"
+          plane: 
+            point: 
+              x: 0.5
+              y: 0.125
+              z: 0.125
+            normal: 
+              x: 0.0
+              y: 1.0
+              z: 0.0
+#       f2:
+#         type: "log10"
+#         params: 
+#           field: "Temperature"
+#           output_name: "log10_Temperature"
+#     pl1:
+#       f1:
+#         type: "composite_vector"
+#         params:
+#           field1: "vx"
+#           field2: "vy"
+#           field3: "vz"
+#           output_name: "velocity"
+#       f2:
+#         type: "vector_magnitude"
+#         params:
+#           field: "velocity"
+#           output_name: "velocity_magnitude"
+#     pl_threshold_thin_clip_z:
+#       f1:
+#         type: "threshold"
+#         params:
+#           field: "z"
+#           min_value: 0.12425
+#           max_value: 0.12575
+#     pl_threshold_thin_clip_y:
+#       f1:
+#         type: "threshold"
+#         params:
+#           field: "y"
+#           min_value: 0.12425
+#           max_value: 0.12575
+
+-
+  action: "add_extracts"
+  extracts:
+#     e1:
+#       type: "relay"
+#       pipeline: "pl_histsampling"
+#       params:
+#         path: "/dev/shm/pl_histsampling"
+#         protocol: "hdf5"
+    e2:
+      type: "relay"
+      pipeline: "pl_geometric_clip"
+      params:
+        path: "pl_geometric_clip"
+        protocol: "hdf5"
+        fields:
+          - Temperature
+          
+
+#png -
+#png   action: "add_scenes"
+#png   scenes:
+#png     #s1:
+#png     #  plots:
+#png     #    p1:
+#png     #      type: "pseudocolor"
+#png     #      pipeline: "pl1"
+#png     #      field: "velocity_magnitude"
+#png     #      points:
+#png     #        radius: 0.01
+#png     #        radius_delta: 2.0
+#png     #  renders:
+#png     #    r1:
+#png     #      image_width: 1024
+#png     #      image_height: 1024
+#png     #      image_prefix: "datasets/velocity_magnitude.%05d"
+#png     #      camera:
+#png     #        azim0uth: 30
+#png     #        elevation: 30
+#png           #dataset_bounds: [-0.5, 0.5, -0.5, 0.5, -0.5, 0.5]
+#png     s3:
+#png       plots:
+#png         p0:
+#png           type: "pseudocolor"
+#png           pipeline: "pl_threshold_thin_clip_z"
+#png           field: "Temperature"
+#png           min_value: 4.5e-9
+#png           max_value: 2.9e-7
+#png           color_table:
+#png             name: "viridis"
+#png           points:
+#png             radius: 0.001
+#png         p1:
+#png           type: "pseudocolor"
+#png           pipeline: "pl_threshold_thin_clip_y"
+#png           field: "Temperature"
+#png           min_value: 4.5e-9
+#png           max_value: 2.9e-7
+#png           color_table:
+#png             name: "viridis"
+#png             annotation: "false"
+#png           points:
+#png             radius: 0.001
+#png       renders:
+#png         r1:
+#png           image_width: 1920
+#png           image_height: 1080
+#png           image_prefix: "datasets/Temperature.%05d"
+#png           camera:
+#png             look_at: [0.9032499665283023, 0.934216537791011, -0.09977008106787671]
+#png             position: [-0.17083061793455523, -0.7633424210641373, 0.30421212713427814]
+#png             up: [0.11828532054131612, 0.15843858294372473, 0.9802580264293799]
+#png             zoom: 2.0
+#png           dataset_bounds: [0.0, 1.0, 0.0, 0.25, 0.0, 0.25]
+#png           color_bar_position: [0.2,0.9,-0.9, -0.7]

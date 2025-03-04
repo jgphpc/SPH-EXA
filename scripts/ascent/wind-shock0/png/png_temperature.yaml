@@ -1,0 +1,105 @@
+-
+  action: "add_pipelines"
+  pipelines:
+    pl_geometric_clip: 
+      f1: 
+        type: "clip"
+        params: 
+          invert: "true" # "false" removes all particles in the negative zone of "normal"
+          plane: 
+            point: 
+              x: 0.5
+              y: 0.125
+              z: 0.125
+            normal: 
+              x: 0.0
+              y: 1.0
+              z: 0.0
+      f2:
+        type: "log10"
+        params: 
+          field: "Temperature"
+          output_name: "log10_Temperature"
+    pl1:
+      f1:
+        type: "composite_vector"
+        params:
+          field1: "vx"
+          field2: "vy"
+          field3: "vz"
+          output_name: "velocity"
+      f2:
+        type: "vector_magnitude"
+        params:
+          field: "velocity"
+          output_name: "velocity_magnitude"
+    pl_threshold_thin_clip_z:
+      f1:
+        type: "threshold"
+        params:
+          field: "z"
+          min_value: 0.12425
+          max_value: 0.12575
+    pl_threshold_thin_clip_y:
+      f1:
+        type: "threshold"
+        params:
+          field: "y"
+          min_value: 0.12425
+          max_value: 0.12575
+-
+  action: "add_scenes"
+  scenes:
+    #s1:
+    #  plots:
+    #    p1:
+    #      type: "pseudocolor"
+    #      pipeline: "pl1"
+    #      field: "velocity_magnitude"
+    #      points:
+    #        radius: 0.01
+    #        radius_delta: 2.0
+    #  renders:
+    #    r1:
+    #      image_width: 1024
+    #      image_height: 1024
+    #      image_prefix: "datasets/velocity_magnitude.%05d"
+    #      camera:
+    #        azim0uth: 30
+    #        elevation: 30
+          #dataset_bounds: [-0.5, 0.5, -0.5, 0.5, -0.5, 0.5]
+    s3:
+      plots:
+        p0:
+          type: "pseudocolor"
+          pipeline: "pl_threshold_thin_clip_z"
+          field: "Temperature"
+          min_value: 4.5e-9
+          max_value: 2.9e-7
+          color_table:
+            name: "viridis"
+          points:
+            radius: 0.001
+        p1:
+          type: "pseudocolor"
+          pipeline: "pl_threshold_thin_clip_y"
+          field: "Temperature"
+          min_value: 4.5e-9
+          max_value: 2.9e-7
+          color_table:
+            name: "viridis"
+            annotation: "false"
+          points:
+            radius: 0.001
+      renders:
+        r1:
+          image_width: 1920
+          image_height: 1080
+          image_prefix: "datasets/Temperature.%05d"
+          camera:
+            look_at: [0.9032499665283023, 0.934216537791011, -0.09977008106787671]
+            position: [-0.17083061793455523, -0.7633424210641373, 0.30421212713427814]
+            up: [0.11828532054131612, 0.15843858294372473, 0.9802580264293799]
+            zoom: 2.0
+          dataset_bounds: [0.0, 1.0, 0.0, 0.25, 0.0, 0.25]
+          color_bar_position: [0.2,0.9,-0.9, -0.7]

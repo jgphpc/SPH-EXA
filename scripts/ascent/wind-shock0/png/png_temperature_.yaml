@@ -1,0 +1,102 @@
+# ln -s hdf5_temperature.yaml ascent_actions.yaml
+# OMP_NUM_THREADS=64 ./sphexa-cuda --init wind-shock -s 2 -n 50 --glass 50c.h5
+# /capstor/scratch/cscs/jfavre/Ascent-cuda/install/hdf5-1.14.1-2/bin/h5dump -H pl_geometric_clip.cycle_000002.root
+#       GROUP "fields" {
+#          GROUP "Temperature" {
+#             DATASET "association" {...}
+#             DATASET "topology" {...}
+#             DATASET "values" {
+#                DATATYPE  H5T_IEEE_F64LE
+#                DATASPACE  SIMPLE { ( 504705 ) / ( H5S_UNLIMITED ) } <-----
+#             }
+#          }
+#       }
+# dealing with vector fields
+# 1) composite independent vector components into a 3-tuple vector
+#    vx, vy, vz are presented to conduit as scalars
+# 2) extracting a component from a 3-tuple vector
+#    "velocity" is presented to conduit as a vector
+# 3) any other variation and combo can be tested to see how strided access work
+-
+  action: "add_pipelines"
+  pipelines:
+#     pl_geometric_clip: 
+#       f1: 
+#         type: "clip"
+#         params: 
+#           invert: "true" # "false" removes all particles in the negative zone of "normal"
+#           box:
+#             min:
+#               x: -200.0
+#               y: -200.0
+#               z: -200.0
+#             max:
+#               x: 200.0
+#               y: 200.0
+#               z: 200.0
+    pl_threshold_thin_clip_z:
+      f1:
+        type: "threshold"
+        params:
+          field: "z"
+          min_value: 0.12425
+          max_value: 0.12575
+    pl_threshold_thin_clip_y:
+      f1:
+        type: "threshold"
+        params:
+          field: "y"
+          min_value: 0.12425
+          max_value: 0.12575
+
+#compare -
+#compare   action: "add_extracts"
+#compare   extracts:
+#compare     e2:
+#compare       type: "relay"
+#compare       pipeline: "pl_geometric_clip"
+#compare       params:
+#compare         # path: "/dev/shm/pl_geometric_clip"
+#compare         path: "pl_geometric_clip"
+#compare         protocol: "hdf5"
+#compare         fields:
+#compare           - Temperature
+
+-
+  action: "add_scenes"
+  scenes:
+    s1:
+      plots:
+        p0:
+          type: "pseudocolor"
+          pipeline: "pl_threshold_thin_clip_z"
+          field: "Temperature"
+          min_value: 4.5e-9
+          max_value: 2.9e-7
+          color_table:
+            name: "viridis"
+          points:
+            radius: 0.001
+        p1:
+          type: "pseudocolor"
+          pipeline: "pl_threshold_thin_clip_y"
+          field: "Temperature"
+          min_value: 4.5e-9
+          max_value: 2.9e-7
+          color_table:
+            name: "viridis"
+            annotation: "false"
+          points:
+            radius: 0.001
+      renders:
+        r1:
+          image_width: 1920
+          image_height: 1080
+          image_prefix: "datasets/Temperature.%05d"
+          camera:
+            look_at: [0.9032499665283023, 0.934216537791011, -0.09977008106787671]
+            position: [-0.17083061793455523, -0.7633424210641373, 0.30421212713427814]
+            up: [0.11828532054131612, 0.15843858294372473, 0.9802580264293799]
+            zoom: 2.0
+          dataset_bounds: [0.0, 1.0, 0.0, 0.25, 0.0, 0.25]
+          color_bar_position: [0.2,0.9,-0.9, -0.7]
