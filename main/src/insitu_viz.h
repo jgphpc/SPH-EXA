@@ -49,11 +49,12 @@ void execute([[maybe_unused]] DataType& d, [[maybe_unused]] long startIndex, [[m
 
     AscentAdaptor::Execute(d, startIndex, endIndex);
 
-    now_a_time = std::chrono::system_clock::to_time_t(Clock::now()); // now2time
-    now_a_tm = std::localtime(&now_a_time); // time2stdtime
-    now_a_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now_a.time_since_epoch()) % 1000;
-    std::cout << "# ascent_t1 " << std::put_time(now_a_tm, "%Y-%m-%d %H:%M:%S")
-        << "." << std::setfill('0') << std::setw(3) << now_a_ms.count() << std::endl;
+    auto now_b = Clock::now();
+    std::time_t now_b_time = std::chrono::system_clock::to_time_t(now_b); // now2time
+    std::tm *now_b_tm = std::localtime(&now_b_time); // time2stdtime
+    auto now_b_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now_b.time_since_epoch()) % 1000;
+    std::cout << "# ascent_t1 " << std::put_time(now_b_tm, "%Y-%m-%d %H:%M:%S")
+        << "." << std::setfill('0') << std::setw(3) << now_b_ms.count() << std::endl;
 #endif
 }
 

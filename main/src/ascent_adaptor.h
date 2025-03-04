@@ -148,10 +148,11 @@ void Execute(DataType& d, long startIndex, long endIndex)
     addField(mesh, "x_m1", get<"x_m1">(d).data(), startIndex, endIndex);
     addField(mesh, "y_m1", get<"y_m1">(d).data(), startIndex, endIndex);
     addField(mesh, "z_m1", get<"z_m1">(d).data(), startIndex, endIndex);
+    */
     addField(mesh, "vx", get<"vx">(d).data(), startIndex, endIndex);
     addField(mesh, "vy", get<"vy">(d).data(), startIndex, endIndex);
     addField(mesh, "vz", get<"vz">(d).data(), startIndex, endIndex);
-    //
+    /*
     addField(mesh, "kx", get<"kx">(d).data(), startIndex, endIndex);
     addField(mesh, "xm", get<"xm">(d).data(), startIndex, endIndex);
     addField(mesh, "Mass", get<"m">(d).data(), startIndex, endIndex);
