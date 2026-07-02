@@ -1,0 +1,21 @@
+include:
+  - remote: 'https://gitlab.com/cscs-ci/recipes/-/raw/master/templates/v2/.ci-ext.yml'
+
+stages:
+  - sphexa_build
+  # - sphexa_run
+
+sph-build-cuda13-sm90-debug:
+  stage: sphexa_build
+  # image: $MYUENV
+  image: prgenv-gnu/26.3:v1
+  extends: [.uenv-runner-daint-gh200]
+  variables:
+    SLURM_TIMELIMIT: '00:01:00'
+    # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
+    WITH_UENV_VIEW: 'spack'  # this is not 'default' view
+    # SLURM_PARTITION: 'debug'
+    SLURM_JOB_NUM_NODES: 1
+  script:
+    - pwd
+
