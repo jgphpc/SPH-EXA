@@ -46,9 +46,6 @@ sph-build-cuda13-sm90-debug-08r:
     # SLURM_PARTITION: 'debug'
   script:
     - pwd
-    # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
-    # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
-    # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
-    # - ls -l /user-environment/
+    - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r
