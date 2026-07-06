@@ -31,6 +31,17 @@ sph-build-cuda13-sm90-debug:
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r
 
+job2:
+  stage: sphexa_build
+  extends: .uenv-runner-daint-gh200
+  image: prgenv-gnu/26.3:v1
+  script:
+    - ls -l /user-environment/
+  variables:
+    WITH_UENV_VIEW: 'default'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+
 sph-build-cuda13-sm90-debug-08r:
   stage: sphexa_build
   # image: $MYUENV
