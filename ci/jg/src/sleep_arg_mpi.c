@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
   int duration = atoi(argv[1]);
   sleep(duration);
   time_t t = time(NULL);
-  printf("rank:%d slept %d sec done at %s", rank, duration, ctime(&t));
+  if (rank == 0) {
+    printf("rank:%d/%d slept %d sec done at %s", rank, size, duration, ctime(&t));
+  }
 
   MPI_Finalize();
   return 0;
