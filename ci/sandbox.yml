@@ -30,18 +30,7 @@ sph-build-cuda13-sm90-debug:
     # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
     # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r
-
-job2:
-  stage: sphexa_build
-  extends: .uenv-runner-daint-gh200
-  image: prgenv-gnu/26.3:v1
-  script:
-    - ls -l /user-environment/
-  variables:
-    WITH_UENV_VIEW: 'default'
-    SLURM_JOB_NUM_NODES: 1
-    SLURM_NTASKS: 1
+    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r -V
 
 sph-build-cuda13-sm90-debug-08r:
   stage: sphexa_build
@@ -61,6 +50,6 @@ sph-build-cuda13-sm90-debug-08r:
     # SLURM_PARTITION: 'debug'
   script:
     - pwd
-    - ls -l /user-environment/
+    # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r
+    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
