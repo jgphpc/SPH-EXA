@@ -17,6 +17,7 @@ sph-build-cuda13-sm90-debug:
     WITH_UENV_VIEW: 'default'
     # SLURM_PARTITION: 'debug'
     SLURM_JOB_NUM_NODES: 1
+    # SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
   script:
     - pwd
     # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
@@ -24,4 +25,32 @@ sph-build-cuda13-sm90-debug:
     # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
     # - ls -l /user-environment/
     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
+
+sph-build-cuda13-sm90-debug-baremetal:
+  stage: sphexa_build
+  # image: $MYUENV
+  # image: prgenv-gnu/26.3:v1
+  extends: [.baremetal-runner-daint-gh200]
+  variables:
+    SLURM_TIMELIMIT: '00:02:00'
+    # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
+    # WITH_UENV_VIEW: 'spack'  # this is not 'default' view
+    # WITH_UENV_VIEW: 'default'
+    # SLURM_PARTITION: 'debug'
+    SLURM_JOB_NUM_NODES: 1
+    # SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+    SLURM_GPUS_PER_NODE: 4
+    SLURM_JOB_ACCOUNT: 'djenkssl'
+  script:
+    - pwd
+    # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
+    # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
+    # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
+    # - ls -l /user-environment/
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
+    - srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_1a & 
+      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_2a &
+      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_3a
