@@ -25,8 +25,8 @@ sph-build-cuda13-sm90-debug:
     # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
     # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
     # - ls -l /user-environment/
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
-    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
+    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r
 
 sph-build-cuda13-sm90-debug-baremetal:
   stage: sphexa_build
@@ -52,6 +52,7 @@ sph-build-cuda13-sm90-debug-baremetal:
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
-    - srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_1a 1 & 
-      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_2a 2 &
-      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_3a 3 
+    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 10r
+#    - srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_1a 1 & 
+#      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_2a 2 &
+#      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_3a 3 
