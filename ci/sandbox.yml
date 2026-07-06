@@ -47,10 +47,10 @@ sph-build-cuda13-sm90-debug-08r:
     # WITH_UENV_VIEW: 'spack'  # this is not 'default' view
     WITH_UENV_VIEW: 'default'
     SLURM_JOB_NUM_NODES: 1
-    SLURM_NTASKS: 288
+    SLURM_NTASKS: 8
     # SLURM_PARTITION: 'debug'
   script:
     - pwd
     # - ls -l /user-environment/
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
