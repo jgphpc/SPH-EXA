@@ -52,7 +52,7 @@ sph-build-cuda13-sm90-debug-baremetal:
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 10r
+    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r
 #    - srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_1a 1 & 
 #      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_2a 2 &
 #      srun -n 10 --uenv prgenv-gnu/26.3:v1 --view=default /users/piccinal/sphexa.git/ci/jg/build/sleep_mpi_3a 3 
