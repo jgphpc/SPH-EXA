@@ -1,6 +1,8 @@
 include:
   - remote: 'https://gitlab.com/cscs-ci/recipes/-/raw/master/templates/v2/.ci-ext.yml'
 
+# CSCS_RUNNER_MODE baremetal  
+
 stages:
   - sphexa_build
   # - sphexa_run
@@ -27,7 +29,6 @@ sph-build-cuda13-sm90-debug:
     # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
     # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
     # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
-    # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r
 
