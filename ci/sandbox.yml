@@ -17,7 +17,8 @@ sph-build-cuda13-sm90-debug:
     WITH_UENV_VIEW: 'default'
     # SLURM_PARTITION: 'debug'
     SLURM_JOB_NUM_NODES: 1
-    # SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+    SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+    # = starlex
   script:
     - pwd
     # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
@@ -39,7 +40,7 @@ sph-build-cuda13-sm90-debug-baremetal:
     # WITH_UENV_VIEW: 'default'
     # SLURM_PARTITION: 'debug'
     SLURM_JOB_NUM_NODES: 1
-    # SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+    SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
     SLURM_GPUS_PER_NODE: 4
     SLURM_JOB_ACCOUNT: 'djenkssl'
   script:
