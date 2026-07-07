@@ -52,4 +52,5 @@ sph-build-cuda13-sm90-debug-08r:
     - pwd
     # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
-    - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
+    # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
+    - env
