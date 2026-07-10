@@ -87,12 +87,15 @@ failed_comparisons=()
 
 for ic in "${ics[@]}"; do
 
+  echo "## rank_id=$rank_id"
   if [ "$rank_id" -eq 0 ]; then
     echo -e "\nRunning test for init condition: $ic"
   fi
   wait
 
   $binary_path --quiet --glass ./50c.h5 --init "$ic" -s 10 -n 50
+  ls -lrt
+
 
   if [ "$rank_id" -eq 0 ]; then
 

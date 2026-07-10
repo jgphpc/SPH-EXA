@@ -4,7 +4,7 @@ sph-run-cuda13-sm90-10ranks:
   extends: [.uenv-runner-daint-gh200]
   image: ${UENV_CUDA}
   variables:
-    SLURM_TIMELIMIT: '01:00:00'
+    SLURM_TIMELIMIT: '00:15:00'
     WITH_UENV_VIEW: 'default'
     SLURM_JOB_NUM_NODES: 1
     SLURM_NTASKS: 10

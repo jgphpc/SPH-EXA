@@ -104,7 +104,9 @@ _run_ctests() {
             ctest --output-on-failure --test-dir $ctest_dir -N -L "$ranks" -V
             ctest --output-on-failure --test-dir $ctest_dir -j -L "$ranks" -V
         else
+            echo "# ---- cpu tests:"
             ctest --output-on-failure --test-dir $ctest_dir -L "$ranks" -L "cpu" -j
+            echo "# ---- gpu tests:"
             ctest --output-on-failure --test-dir $ctest_dir -L "$ranks" -L "gpu"
 #del             ctest --test-dir $ctest_dir -L "$ranks" --show-only=json-v1 | jq -r .tests[]
 #del             ctest --test-dir $ctest_dir -L "$ranks" --show-only=json-v1 | jq -r .tests[].command[-1] &> eff.sh
@@ -191,15 +193,12 @@ _run_sphexa-cuda() {
     # --glass ./50c.h5 -> H5PartGetNumParticles: Iteration is invalid! Have you set the time step?
     $APP_INSTALL_DIR/$exe --init sedov --G 1.0 -n 40 -s 100 -w 10 --quiet
 
-    ls -lrt
-    echo "SLURM_PROCID=$SLURM_PROCID"
     if [ "$SLURM_PROCID" -eq 0 ]; then mv constants.txt constants_ref.txt ; fi
     wait
 
     $APP_INSTALL_DIR/$exe --init dump_sedov.h5:4 -s 100 --quiet
 
     if [ "$SLURM_PROCID" -eq 0 ]; then
-      ls -lrt
       awk 'start||$1==50 {print; start=1}' constants_ref.txt > constants_ref_tail.txt
       PYTHONPATH=$PWD/external:$PYTHONPATH \
           /user-environment/env/default/bin/python3 ci/scripts/compare_constants.py \
