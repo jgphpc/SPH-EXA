@@ -87,7 +87,7 @@ failed_comparisons=()
 
 for ic in "${ics[@]}"; do
 
-  echo "## rank_id=$rank_id"
+  ## echo "## rank_id=$rank_id"
   if [ "$rank_id" -eq 0 ]; then
     echo -e "\nRunning test for init condition: $ic"
   fi
@@ -99,9 +99,10 @@ for ic in "${ics[@]}"; do
 
     const1="$PWD/ci/scripts/compare_constants.py $PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt"
     const2="$PWD/constants.txt"
-    ls -l $const1
-    ls -l $const2
-    abs_cols="${abs_columns_for_ic[$ic]:-}"
+    ls -1 $const1
+    ls -1 $const2
+    abs_cols="${abs_columns_for_ic[$ic]}"
+    echo "abs_cols=$abs_cols"
 
     $uenv_python \
         $PWD/ci/scripts/compare_constants.py \
