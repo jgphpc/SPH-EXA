@@ -59,7 +59,7 @@ sph-build-cuda13-sm90-debug-08r:
     - cmake -S src -B build -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug "-DMPIEXEC_EXTRA_FLAGS=--overlap"
     - srun -n1 --overlap hostname
     - cmake --build build -j
-    - ctest --test-dir build -N -V
+    - ctest --test-dir build -j -V
     # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
