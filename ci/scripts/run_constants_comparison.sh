@@ -97,21 +97,28 @@ for ic in "${ics[@]}"; do
 
   if [ "$rank_id" -eq 0 ]; then
 
-    touch ci/reference/const-${ic}-${backend}-rel-ref.txt constants.txt
+    const1="$PWD/ci/scripts/compare_constants.py $PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt"
+    const2="$PWD/constants.txt"
+    ls -l $const1
+    ls -l $const2
     abs_cols="${abs_columns_for_ic[$ic]:-}"
-    cmd="$uenv_python ci/scripts/compare_constants.py $PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt $PWD/constants.txt"
 
-    if [ -n "$abs_cols" ]; then
-      cmd+=("$abs_cols")
-    fi
+    $uenv_python \
+        $PWD/ci/scripts/compare_constants.py \
+        $const1 \
+        $const2 \
+        $abs_cols
+    rc=$?
+    echo "rc=$rc"
+    if [ ! $rc ] ; then failed_comparisons+=("$ic") ; fi
 
-#    ${cmd[@]} ; rc=$?
-#    echo "rc=$rc"
-#    failed_comparisons+=("$ic")
-
-    if ! "${cmd[@]}"; then
-      failed_comparisons+=("$ic")
-    fi
+#    if [ -n "$abs_cols" ]; then
+#      cmd+=("$abs_cols")
+#    fi
+#
+#    if ! "${cmd[@]}"; then
+#      failed_comparisons+=("$ic")
+#    fi
 
   fi
   wait
