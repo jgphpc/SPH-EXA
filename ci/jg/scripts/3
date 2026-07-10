@@ -1,0 +1,4 @@
+# SLURM_OVERLAP=1 \
+
+ctest --test-dir build -N -V -L 08r
+# > 08.log

@@ -1,0 +1,7 @@
+cmake -S src -B build \
+-DCMAKE_C_COMPILER=mpicc \
+-DCMAKE_BUILD_TYPE=Debug
+
+#no-DMPIEXEC_EXECUTABLE='srun --overlap'
+#no -DMPIEXEC_EXECUTABLE='srun;--overlap'
+# -DMPIEXEC_NUMPROC_FLAG="--overlap;-n"
