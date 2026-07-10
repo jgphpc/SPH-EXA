@@ -94,17 +94,20 @@ for ic in "${ics[@]}"; do
   wait
 
   $binary_path --quiet --glass ./50c.h5 --init "$ic" -s 10 -n 50
-  ls -lrt
-
 
   if [ "$rank_id" -eq 0 ]; then
 
+    ls -lrt
+    ls -lrt ci/scripts/compare_constants.py
+    ls -lrt ci/reference/const-${ic}-${backend}-rel-ref.txt
+    ls -lrt constants.txt
     abs_cols="${abs_columns_for_ic[$ic]:-}"
     cmd="$uenv_python ci/scripts/compare_constants.py ci/reference/const-${ic}-${backend}-rel-ref.txt constants.txt"
 
     if [ -n "$abs_cols" ]; then
       cmd+=("$abs_cols")
     fi
+    echo "cmd == $cmd == ${cmd[@]}"
 
     if ! "${cmd[@]}"; then
       failed_comparisons+=("$ic")
