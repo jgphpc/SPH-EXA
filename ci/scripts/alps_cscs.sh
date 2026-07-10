@@ -191,7 +191,9 @@ _run_sphexa-cuda() {
     # --glass ./50c.h5 -> H5PartGetNumParticles: Iteration is invalid! Have you set the time step?
     $APP_INSTALL_DIR/$exe --init sedov --G 1.0 -n 40 -s 100 -w 10 --quiet
 
-    if [ "$SLURM_PROCID" -eq 0 ]; then mv constants.txt constants_ref.txt; fi
+    ls -lrt
+    echo "SLURM_PROCID=$SLURM_PROCID"
+    if [ "$SLURM_PROCID" -eq 0 ]; then mv constants.txt constants_ref.txt ; fi
     wait
 
     $APP_INSTALL_DIR/$exe --init dump_sedov.h5:4 -s 100 --quiet
@@ -201,7 +203,7 @@ _run_sphexa-cuda() {
       awk 'start||$1==50 {print; start=1}' constants_ref.txt > constants_ref_tail.txt
       PYTHONPATH=$PWD/external:$PYTHONPATH \
           /user-environment/env/default/bin/python3 ci/scripts/compare_constants.py \
-          constants_ref_tail.txt constants.txt "7,8"
+          $PWD/constants_ref_tail.txt $PWD/constants.txt "7,8"
       if [ $? -ne 0 ]; then exit 1 ; fi
     fi
     wait

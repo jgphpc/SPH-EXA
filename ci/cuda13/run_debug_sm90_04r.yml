@@ -1,4 +1,4 @@
-sph-run-cuda13-sm90-06ranks:
+sph-run-cuda13-sm90-04ranks:
   stage: sphexa_run
   needs: ['sph-build-cuda13-sm90-debug']
   extends: [.uenv-runner-daint-gh200]

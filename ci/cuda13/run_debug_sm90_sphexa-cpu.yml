@@ -12,8 +12,8 @@ sph-run-cuda13-sm90-sphexa-cpu:
     OMP_NUM_THREADS: 64
     # SLURM_PARTITION: 'debug'
   before_script:
-    - if [ "$SLURM_PROCID" -eq 0 ]; then pwd ; fi
+    - if [ "${SLURM_PROCID}" -eq 0 ]; then pwd ; fi
   script:
     - |
       source ci/scripts/alps_cscs.sh &&
-      _run_sphexa-cuda $APP_INSTALL_DIR cpu
+      _run_sphexa-cuda ${APP_INSTALL_DIR} cpu
