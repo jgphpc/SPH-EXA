@@ -176,7 +176,7 @@ _run_sphexa-cuda() {
     # OMP_NUM_THREADS=$4
 
     if [ "$SLURM_PROCID" -eq 0 ]; then
-        source ci/scripts/cscs_alps.sh
+        source ci/scripts/alps_cscs.sh
         _run_prerun h5
         _build_python_deps
     fi

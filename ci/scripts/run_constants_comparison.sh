@@ -43,7 +43,7 @@ esac
 rank_id="${SLURM_PROCID:-0}"
 
 if [ "$rank_id" -eq 0 ]; then
-    source ci/scripts/cscs_alps.sh
+    source ci/scripts/alps_cscs.sh
     _run_prerun h5
     _build_python_deps
 fi
