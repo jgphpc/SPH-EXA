@@ -1,13 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 # usv prgenv-gnu/26.3:v1
-# cmake -B build -S src -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug \
-# -DMPIEXEC_EXECUTABLE="srun" \
-# "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u"
-# "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u;--overlap;--ntasks-per-node=288;--reservation=uss140-shs131-nv590-staging;--gpus-per-node=4;--account=djenkssl;-t2"
-# --- CSCS_RUNNER_MODE baremetal
-# cmake --build build -j
-# ctest --test-dir build -N -V # -j
-# srun --gpus-per-node=4 -A djenkssl -n 10 --reservation=uss140-shs131-nv590-staging -t1 ./build/sleep_mpi_2a 2
+# see scripts/
+# --- CSCS_RUNNER_MODE baremetal ?
 #ok export SLURM_TIMELIMIT='00:02:00'
 #ok export SLURM_JOB_NUM_NODES=1
 #ok export SLURM_JOB_RESERVATION='uss140-shs131-nv590-staging'
