@@ -61,9 +61,10 @@ sph-build-cuda13-sm90-debug-08r:
       -DMPIEXEC_POSTFLAGS='--overlap'
     - srun -n1 --overlap hostname
     - cmake --build build -j
-    - for ii in $(ctest --test-dir build -L 08r --show-only=json-v1 | jq -r '.tests[].command[4:] | join(" ")') ;do
-      srun --overlap -n 8 $ii ;
-      done
+    - ctest --test-dir build -L 08r -V -j
+    # - for ii in $(ctest --test-dir build -L 08r --show-only=json-v1 | jq -r '.tests[].command[4:] | join(" ")') ;do
+    #   srun --overlap -n 8 $ii ;
+    #   done
     # -DMPIEXEC_PREFLAGS='xx' -DMPIEXEC_POSTFLAGS='yy' 
     # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
