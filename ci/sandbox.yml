@@ -56,8 +56,8 @@ sph-build-cuda13-sm90-debug-08r:
   script:
     - pwd
     - cd ci/jg/
-    - cmake -S src -B build -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug "-DMPIEXEC_EXTRA_FLAGS=--overlap"
-      -DMPIEXEC_EXECUTABLE='srun'
+    - cmake -S src -B build -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug "-DMPIEXEC_EXTRA_FLAGS=--overlap" \
+      -DMPIEXEC_EXECUTABLE='srun' \
       -DMPIEXEC_POSTFLAGS='--overlap'
     - srun -n1 --overlap hostname
     - cmake --build build -j
