@@ -4,6 +4,12 @@ include:
 stages:
   - sphexa_build
   # - sphexa_run
+variables:
+  SLURM_RESERVATION: 'uss140-shs131-nv590-staging'
+  SBATCH_RESERVATION: 'uss140-shs131-nv590-staging'
+  UENV_CUDA: 'prgenv-gnu/26.3:v1'
+  WITH_UENV_VIEW: 'default'
+  
 
 #ok sph-build-cuda13-sm90-debug:
 #ok   stage: sphexa_build
@@ -32,15 +38,13 @@ stages:
 
 sph-build-cuda13-sm90-debug-08r:
   stage: sphexa_build
-  # image: $MYUENV
-  image: prgenv-gnu/26.3:v1
+  image: ${UENV_CUDA}
+  # image: prgenv-gnu/26.3:v1
   extends: [.uenv-runner-daint-gh200]
   # extends: [.baremetal-runner-daint-gh200]
   variables:
     SLURM_TIMELIMIT: '00:10:00'
     SLURM_JOB_NUM_NODES: 1
-    SLURM_RESERVATION: 'uss140-shs131-nv590-staging'
-    SBATCH_RESERVATION: 'uss140-shs131-nv590-staging'
     SLURM_GPUS_PER_NODE: 4
     SLURM_JOB_ACCOUNT: 'djenkssl'
     # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
