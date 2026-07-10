@@ -2,6 +2,10 @@ cmake -S src -B build \
 -DCMAKE_C_COMPILER=mpicc \
 -DCMAKE_BUILD_TYPE=Debug
 
+# -DMPIEXEC_EXECUTABLE="srun" \
 #no-DMPIEXEC_EXECUTABLE='srun --overlap'
 #no -DMPIEXEC_EXECUTABLE='srun;--overlap'
 # -DMPIEXEC_NUMPROC_FLAG="--overlap;-n"
+#
+# "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u"
+# "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u;--overlap;--ntasks-per-node=288;--reservation=uss140-shs131-nv590-staging;--gpus-per-node=4;--account=djenkssl;-t2"

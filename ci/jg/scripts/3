@@ -1,4 +1,6 @@
 # SLURM_OVERLAP=1 \
 
 ctest --test-dir build -N -V -L 08r
+
+# srun --gpus-per-node=4 -A djenkssl -n 10 --reservation=uss140-shs131-nv590-staging -t1 ./build/sleep_mpi_2a 2
 # > 08.log
