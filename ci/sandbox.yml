@@ -39,7 +39,8 @@ sph-build-cuda13-sm90-debug-08r:
   variables:
     SLURM_TIMELIMIT: '00:10:00'
     SLURM_JOB_NUM_NODES: 1
-    SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+    SLURM_RESERVATION: 'uss140-shs131-nv590-staging'
+    SBATCH_RESERVATION: 'uss140-shs131-nv590-staging'
     SLURM_GPUS_PER_NODE: 4
     SLURM_JOB_ACCOUNT: 'djenkssl'
     # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
