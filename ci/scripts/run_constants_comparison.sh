@@ -97,12 +97,11 @@ for ic in "${ics[@]}"; do
 
   if [ "$rank_id" -eq 0 ]; then
 
-    const1="$PWD/ci/scripts/compare_constants.py $PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt"
+    const1="$PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt"
     const2="$PWD/constants.txt"
     ls -1 $const1
     ls -1 $const2
     abs_cols="${abs_columns_for_ic[$ic]}"
-    echo "abs_cols=$abs_cols"
 
     $uenv_python \
         $PWD/ci/scripts/compare_constants.py \
