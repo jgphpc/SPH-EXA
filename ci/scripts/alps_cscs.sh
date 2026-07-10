@@ -34,15 +34,18 @@ EOF
  }
 
 _build_sphexa_cuda() {
-    tar xf ~/eff.tar
+    # tar xf ~/eff.tar
     # for ii in $(grep -rl mpiexec sphexa+spack/build_ctest/spack-stage-sphexa-*/spack-build-*/ |grep CTestTestfile.cmake) ; do
+    # sed 's@/[^"]*/mpiexec\"@/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
+
+    cd sphexa+spack
+    SPACK_INSTALL_FLAGS="--keep-stage" ./build
+    cd ..
+
+    # allow ctest to call srun from the pipeline
     for ii in $(find sphexa+spack/build_ctest/spack-stage-sphexa-*/spack-build-*/ -name CTestTestfile.cmake) ;do
-        # sed 's@/[^"]*/mpiexec\"@/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
         sed -i 's@/[^"]*/mpiexec\"@srun\" \"--overlap\"@' $ii
     done
-##    cd sphexa+spack
-##    SPACK_INSTALL_FLAGS="--keep-stage" ./build
-##    cd ..
 }
 
 _build_python_deps() {

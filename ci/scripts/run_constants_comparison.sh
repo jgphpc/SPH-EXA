@@ -99,8 +99,6 @@ for ic in "${ics[@]}"; do
 
     const1="$PWD/ci/reference/const-${ic}-${backend}-rel-ref.txt"
     const2="$PWD/constants.txt"
-    ls -1 $const1
-    ls -1 $const2
     abs_cols="${abs_columns_for_ic[$ic]}"
 
     $uenv_python \
@@ -109,16 +107,8 @@ for ic in "${ics[@]}"; do
         $const2 \
         $abs_cols
     rc=$?
-    echo "rc=$rc"
+    echo "# -------------"
     if [ ! $rc ] ; then failed_comparisons+=("$ic") ; fi
-
-#    if [ -n "$abs_cols" ]; then
-#      cmd+=("$abs_cols")
-#    fi
-#
-#    if ! "${cmd[@]}"; then
-#      failed_comparisons+=("$ic")
-#    fi
 
   fi
   wait
