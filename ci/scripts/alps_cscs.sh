@@ -93,19 +93,19 @@ _run_ctests() {
             for ii in $(grep -rl mpiexec sphexa+spack/build_ctest/spack-stage-sphexa-*/spack-build-*/ |grep CTestTestfile.cmake) ; do
                 # sed 's@/[^"]*/mpiexec\"@/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
                 sed -i 's@/[^"]*/mpiexec\"@srun\" \"--overlap\"@' $ii # > /tmp/eff # |grep srun
-                # mv /tmp/eff $ii
                 #0 sed 's@\"/usr/bin/srun\"@\"/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
-                # mv /tmp/eff $ii
+                #0 mv /tmp/eff $ii
+# "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u;--overlap;--ntasks-per-node=288;--reservation=uss140-shs131-nv590-staging;--gpus-per-node=4;--account=djenkssl;-t2"
             done
 
         fi
 
         if [ $ranks = "01r" ] ; then
-            ctest --test-dir $ctest_dir -N -L "$ranks" -V
-            ctest --test-dir $ctest_dir -j -L "$ranks" -V
+            ctest --output-on-failure --test-dir $ctest_dir -N -L "$ranks" -V
+            ctest --output-on-failure --test-dir $ctest_dir -j -L "$ranks" -V
         else
-            ctest --test-dir $ctest_dir -L "$ranks" -L "cpu" -j
-            ctest --test-dir $ctest_dir -L "$ranks" -L "gpu"
+            ctest --output-on-failure --test-dir $ctest_dir -L "$ranks" -L "cpu" -j
+            ctest --output-on-failure --test-dir $ctest_dir -L "$ranks" -L "gpu"
 #del             ctest --test-dir $ctest_dir -L "$ranks" --show-only=json-v1 | jq -r .tests[]
 #del             ctest --test-dir $ctest_dir -L "$ranks" --show-only=json-v1 | jq -r .tests[].command[-1] &> eff.sh
 #del             # bash ./eff.sh
@@ -197,6 +197,7 @@ _run_sphexa-cuda() {
     $APP_INSTALL_DIR/$exe --init dump_sedov.h5:4 -s 100 --quiet
 
     if [ "$SLURM_PROCID" -eq 0 ]; then
+      ls -lrt
       awk 'start||$1==50 {print; start=1}' constants_ref.txt > constants_ref_tail.txt
       PYTHONPATH=$PWD/external:$PYTHONPATH \
           /user-environment/env/default/bin/python3 ci/scripts/compare_constants.py \
@@ -208,6 +209,7 @@ _run_sphexa-cuda() {
 }
 
 _run_get_build_artifact() {
+    # NOTE: to avoid uploading data to gitlab.com, use a local tarfile 
     if [ "$SLURM_PROCID" -eq 0 ]; then
 
         CI_PIPELINE_ID=$1

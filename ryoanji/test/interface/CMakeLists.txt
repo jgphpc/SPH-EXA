@@ -9,8 +9,8 @@ function(addRyoanjiMpiTest source exename testname ranks)
     install(TARGETS ${exename} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR}/ryoanji/)
 endfunction()
 
-addRyoanjiMpiTest(global_upsweep_cpu.cpp global_upsweep_cpu GlobalUpsweepCpu 10)
-set_tests_properties(global_upsweep_cpu PROPERTIES LABELS "10r;cpu")
+addRyoanjiMpiTest(global_upsweep_cpu.cpp global_upsweep_cpu GlobalUpsweepCpu 12)
+set_tests_properties(global_upsweep_cpu PROPERTIES LABELS "12r;cpu")
 
 function(addRyoanjiGpuMpiTest source exename testname ranks)
     if (CMAKE_CUDA_COMPILER OR CMAKE_HIP_COMPILER)
@@ -33,5 +33,5 @@ function(addRyoanjiGpuMpiTest source exename testname ranks)
     endif ()
 endfunction()
 
-addRyoanjiGpuMpiTest(global_upsweep_gpu.cpp global_upsweep_gpu GlobalUpsweepGpu 10)
-addRyoanjiGpuMpiTest(global_forces_gpu.cpp global_forces_gpu GlobalForcesGpu 6)
+addRyoanjiGpuMpiTest(global_upsweep_gpu.cpp global_upsweep_gpu GlobalUpsweepGpu 4)
+addRyoanjiGpuMpiTest(global_forces_gpu.cpp global_forces_gpu GlobalForcesGpu 4)
