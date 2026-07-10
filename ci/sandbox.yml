@@ -33,9 +33,9 @@ stages:
 sph-build-cuda13-sm90-debug-08r:
   stage: sphexa_build
   # image: $MYUENV
-  #### image: prgenv-gnu/26.3:v1
-  # extends: [.uenv-runner-daint-gh200]
-  extends: [.baremetal-runner-daint-gh200]
+  image: prgenv-gnu/26.3:v1
+  extends: [.uenv-runner-daint-gh200]
+  # extends: [.baremetal-runner-daint-gh200]
   variables:
     SLURM_TIMELIMIT: '00:10:00'
     SLURM_JOB_NUM_NODES: 1
