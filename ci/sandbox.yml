@@ -37,7 +37,7 @@ sph-build-cuda13-sm90-debug-08r:
   # extends: [.uenv-runner-daint-gh200]
   extends: [.baremetal-runner-daint-gh200]
   variables:
-    SLURM_TIMELIMIT: '00:02:00'
+    SLURM_TIMELIMIT: '00:10:00'
     SLURM_JOB_NUM_NODES: 1
     SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
     SLURM_GPUS_PER_NODE: 4
@@ -50,7 +50,12 @@ sph-build-cuda13-sm90-debug-08r:
     # SLURM_PARTITION: 'debug'
   script:
     - pwd
+    - cd ci/jg/
+    - cmake -S src -B build -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug "-DMPIEXEC_EXTRA_FLAGS=--overlap"
+    - srun -n1 --overlap hostname
+    - cmake --build build -j
+    - ctest --test-dir build -N -V
     # - ls -l /user-environment/
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -L 08r -V
     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 08r -V
-    - env
+    # - env
