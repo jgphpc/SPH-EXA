@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 # usv prgenv-gnu/26.3:v1
 # cmake -B build -S src -DCMAKE_C_COMPILER=mpicc -DCMAKE_BUILD_TYPE=Debug \
+# -DMPIEXEC_EXECUTABLE="srun" \
 # "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u"
 # "-DMPIEXEC_EXTRA_FLAGS=--uenv=prgenv-gnu/26.3:v1;--view=default;-u;--overlap;--ntasks-per-node=288;--reservation=uss140-shs131-nv590-staging;--gpus-per-node=4;--account=djenkssl;-t2"
 # --- CSCS_RUNNER_MODE baremetal
@@ -57,7 +58,9 @@ function(add_mpi_test sourcename testname seconds ranks)
     # set(cmd ${_exe})
     # list(PREPEND cmd "${MPIEXEC_EXECUTABLE}" "${MPIEXEC_NUMPROC_FLAG}" "${${name}_RANKS}")
     # add_test(NAME "${name}" COMMAND ${cmd} ${args})
-    add_test(NAME ${testname} COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_EXTRA_FLAGS} ${MPIEXEC_NUMPROC_FLAG} ${ranks} ${testname} ${seconds})
+    add_test(NAME ${testname} COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${ranks} ${testname} ${seconds})
+    # MPIEXEC_POSTFLAGS
+    # add_test(NAME ${testname} COMMAND ${MPIEXEC_EXECUTABLE} ${MPIEXEC_EXTRA_FLAGS} ${MPIEXEC_NUMPROC_FLAG} ${ranks} ${testname} ${seconds})
     #2 add_test(NAME ${testname} COMMAND ${testname} ${seconds})
     if (${ranks} LESS 10)
         set_tests_properties(${testname} PROPERTIES LABELS "0${ranks}r;cpu")
