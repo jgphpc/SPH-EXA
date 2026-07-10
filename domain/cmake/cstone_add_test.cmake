@@ -32,9 +32,11 @@ function(cstone_add_test name)
 
   set(cmd ${_exe})
 
-  list(PREPEND cmd "${MPIEXEC_EXECUTABLE}" "${MPIEXEC_NUMPROC_FLAG}"
-     "${${name}_RANKS}"
-  )
+  if(${name}_RANKS GREATER 1)
+    list(PREPEND cmd "${MPIEXEC_EXECUTABLE}" "${MPIEXEC_NUMPROC_FLAG}"
+       "${${name}_RANKS}"
+    )
+  endif()
 
   add_test(NAME "${name}" COMMAND ${cmd} ${args})
   if(${run_serial})
