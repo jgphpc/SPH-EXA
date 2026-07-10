@@ -24,10 +24,9 @@ sph-build-cuda13-sm90-debug:
     - 'export SPACK_SYSTEM_CONFIG_PATH=${UENV_SPACK_CONFIG_PATH}'
     - echo "SPACK_SYSTEM_CONFIG_PATH=$SPACK_SYSTEM_CONFIG_PATH"
     - 'source ci/scripts/alps_cscs.sh'
-##    - '_build_clone_uenv_spack'
-##    - '_build_config_sphexa_cuda Debug'
+    - '_build_clone_uenv_spack'
+    - '_build_config_sphexa_cuda Debug'
     - 'time -p _build_sphexa_cuda'
   artifacts:
     paths:
       - sphexa+spack
-##      - external
