@@ -17,6 +17,8 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+#include <cstdlib>
+#include <string>
 
 #define THRUST_DEVICE_SYSTEM THRUST_DEVICE_SYSTEM_OMP
 #include <thrust/execution_policy.h>
@@ -31,6 +33,10 @@ int main()
 {
     using KeyType    = uint64_t;
     unsigned numKeys = 32000000;
+    if (const char* env = std::getenv("NUM_KEYS"))
+    {
+        numKeys = static_cast<unsigned>(std::stoul(env));
+    }
 
     using Real = double;
     Box<Real> box(-1, 1);
