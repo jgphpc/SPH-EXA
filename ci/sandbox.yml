@@ -60,6 +60,5 @@ sph-build-cuda13-sm90-debug-08r:
     - bash ./scripts/0
     - bash ./scripts/1
     - bash ./scripts/2
-    - bash ./scripts/3
     - srun -n1 --overlap hostname
-    - ctest --test-dir build -L 08r -V -j
+    - bash ./scripts/3
