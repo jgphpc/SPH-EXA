@@ -1,0 +1,105 @@
+include:
+  - remote: 'https://gitlab.com/cscs-ci/recipes/-/raw/master/templates/v2/.ci-ext.yml'
+
+stages:
+  - sphexa_build
+  # - sphexa_run
+variables:
+  SLURM_RESERVATION: 'uss140-shs131-nv590-staging'
+  SBATCH_RESERVATION: 'uss140-shs131-nv590-staging'
+  UENV_CUDA: 'prgenv-gnu/26.3:v1'
+  WITH_UENV_VIEW: 'default'
+
+#ok sph-build-cuda13-sm90-debug:
+#ok   stage: sphexa_build
+#ok   # image: $MYUENV
+#ok   image: prgenv-gnu/26.3:v1
+#ok   extends: [.uenv-runner-daint-gh200]
+#ok   variables:
+#ok     # SLURM_TIMELIMIT: '00:02:00'
+#ok     # SLURM_JOB_NUM_NODES: 1
+#ok     # SLURM_JOB_RESERVATION: 'uss140-shs131-nv590-staging'
+#ok     # SLURM_GPUS_PER_NODE: 4
+#ok     # SLURM_JOB_ACCOUNT: 'djenkssl'
+#ok     # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
+#ok     # WITH_UENV_VIEW: 'spack'  # this is not 'default' view
+#ok     WITH_UENV_VIEW: 'default'
+#ok     SLURM_JOB_NUM_NODES: 1
+#ok     # SLURM_NTASKS: 2
+#ok     # SLURM_PARTITION: 'debug'
+#ok   script:
+#ok     - pwd
+#ok     # - echo "CI_PROJECT_URL=$CI_PROJECT_URL"
+#ok     # - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
+#ok     # - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA"
+#ok     # - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -N -V
+#ok     - ctest --test-dir /users/piccinal/sphexa.git/ci/jg/build/ -j -L 01r -V
+
+sph-build-cuda13-sm90-debug-01r:
+  stage: sphexa_build
+  image: ${UENV_CUDA}
+  extends: [.uenv-runner-daint-gh200]
+  variables:
+    SLURM_TIMELIMIT: '00:01:00'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_GPUS_PER_NODE: 4
+    SLURM_JOB_ACCOUNT: 'djenkssl'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+  script:
+    - pwd
+
+sph-build-cuda13-sm90-debug-02r:
+  stage: sphexa_build
+  image: ${UENV_CUDA}
+  extends: [.uenv-runner-daint-gh200]
+  variables:
+    SLURM_TIMELIMIT: '00:01:00'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_GPUS_PER_NODE: 4
+    SLURM_JOB_ACCOUNT: 'djenkssl'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+  script:
+    - pwd
+
+sph-build-cuda13-sm90-debug-03r:
+  stage: sphexa_build
+  image: ${UENV_CUDA}
+  extends: [.uenv-runner-daint-gh200]
+  variables:
+    SLURM_TIMELIMIT: '00:01:00'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_GPUS_PER_NODE: 4
+    SLURM_JOB_ACCOUNT: 'djenkssl'
+    SLURM_JOB_NUM_NODES: 1
+    SLURM_NTASKS: 1
+  script:
+    - pwd
+
+# sph-build-cuda13-sm90-debug-08r:
+#   stage: sphexa_build
+#   image: ${UENV_CUDA}
+#   # image: prgenv-gnu/26.3:v1
+#   # extends: [.uenv-runner-starlex-gh200]
+#   extends: [.uenv-runner-daint-gh200]
+#   # extends: [.baremetal-runner-daint-gh200]
+#   variables:
+#     SLURM_TIMELIMIT: '00:10:00'
+#     SLURM_JOB_NUM_NODES: 1
+#     SLURM_GPUS_PER_NODE: 4
+#     SLURM_JOB_ACCOUNT: 'djenkssl'
+#     # PERSIST_IMAGE_NAME: ${CSCS_REGISTRY_PATH}/sphexa_cuda13_debug:${CI_COMMIT_SHORT_SHA}
+#     # WITH_UENV_VIEW: 'spack'  # this is not 'default' view
+#     # WITH_UENV_VIEW: 'default'
+#     SLURM_JOB_NUM_NODES: 1
+#     ## SLURM_NTASKS: 8
+#     # SLURM_PARTITION: 'debug'
+#   script:
+#     - pwd
+#     - cd ci/jg/
+#     - bash ./scripts/0
+#     - bash ./scripts/1
+#     - bash ./scripts/2
+#     - srun -n1 --overlap hostname
+#     - bash ./scripts/3

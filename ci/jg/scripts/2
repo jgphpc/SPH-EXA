@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# for ii in $(grep -rl mpiexec sphexa+spack/build_ctest/spack-stage-sphexa-*/spack-build-*/ |grep CTestTestfile.cmake) ; do
+for ii in $(find . -name CTestTestfile.cmake) ;do
+    # sed 's@/[^"]*/mpiexec\"@/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
+    # sed 's@/[^"]*/mpiexec\"@srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
+    # mv /tmp/eff $ii
+    sed 's@\"/usr/bin/srun\"@\"/usr/bin/srun\" \"--overlap\"@' $ii > /tmp/eff # |grep srun
+    mv /tmp/eff $ii
+done

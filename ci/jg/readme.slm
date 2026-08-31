@@ -1,0 +1,153 @@
+SBATCH_MEM_BIND
+Set to value of the --mem-bind option.
+SBATCH_MEM_BIND_LIST
+Set to bit mask used for memory binding.
+SBATCH_MEM_BIND_PREFER
+Set to "prefer" if the --mem-bind option includes the prefer option.
+SBATCH_MEM_BIND_TYPE
+Set to the memory binding type specified with the --mem-bind option. Possible values are "none", "rank", "map_mem:", "mask_mem:" and "local".
+SBATCH_MEM_BIND_VERBOSE
+Set to "verbose" if the --mem-bind option includes the verbose option. Set to "quiet" otherwise.
+SLURM_*_HET_GROUP_#
+For a heterogeneous job allocation, the environment variables are set separately for each component.
+SLURM_ARRAY_JOB_ID
+Job array's master job ID number.
+SLURM_ARRAY_TASK_COUNT
+Total number of tasks in a job array.
+SLURM_ARRAY_TASK_ID
+Job array ID (index) number.
+SLURM_ARRAY_TASK_MAX
+Job array's maximum ID (index) number.
+SLURM_ARRAY_TASK_MIN
+Job array's minimum ID (index) number.
+SLURM_ARRAY_TASK_STEP
+Job array's index step size.
+SLURM_CLUSTER_NAME
+Name of the cluster on which the job is executing.
+SLURM_CPUS_ON_NODE
+Number of CPUs allocated to the batch step. NOTE: The select/linear plugin allocates entire nodes to jobs, so the value indicates the total count of CPUs on the node. For the cons/tres plugin, this number indicates the number of CPUs on this node allocated to the step.
+SLURM_CPUS_PER_GPU
+Number of CPUs requested per allocated GPU. Only set if the --cpus-per-gpu option is specified.
+SLURM_CPUS_PER_TASK
+Number of cpus requested per task. Only set if either the --cpus-per-task option or the --tres-per-task=cpu=# option is specified.
+SLURM_CONTAINER
+OCI Bundle for job. Only set if --container is specified.
+SLURM_CONTAINER_ID
+OCI id for job. Only set if --container-id is specified.
+SLURM_CONTAINER_TYPE
+Job container type for job. Only set if --container-type is specified.
+SLURM_DIST_PLANESIZE
+Plane distribution size. Only set for plane distributions. See -m, --distribution.
+SLURM_DISTRIBUTION
+Same as -m, --distribution
+SLURM_EXPORT_ENV
+Same as --export.
+SLURM_GPU_BIND
+Requested binding of tasks to GPU. Only set if the --gpu-bind option is specified.
+SLURM_GPU_FREQ
+Requested GPU frequency. Only set if the --gpu-freq option is specified.
+SLURM_GPUS
+Number of GPUs requested. Only set if the -G, --gpus option is specified.
+SLURM_GPUS_ON_NODE
+Number of GPUs allocated to the batch step.
+SLURM_GPUS_PER_NODE
+Requested GPU count per allocated node. Only set if the --gpus-per-node option is specified.
+SLURM_GPUS_PER_SOCKET
+Requested GPU count per allocated socket. Only set if the --gpus-per-socket option is specified.
+SLURM_GTIDS
+Global task IDs running on this node. Zero origin and comma separated. It is read internally by pmi if Slurm was built with pmi support. Leaving the variable set may cause problems when using external packages from within the job (Abaqus and Ansys have been known to have problems when it is set - consult the appropriate documentation for 3rd party software).
+SLURM_HET_SIZE
+Set to count of components in heterogeneous job.
+SLURM_JOB_ACCOUNT
+Account name associated of the job allocation.
+SLURM_JOB_CPUS_PER_NODE
+Count of CPUs available to the job on the nodes in the allocation, using the format CPU_count[(xnumber_of_nodes)][,CPU_count [(xnumber_of_nodes)] ...]. For example: SLURM_JOB_CPUS_PER_NODE='72(x2),36' indicates that on the first and second nodes (as listed by SLURM_JOB_NODELIST) the allocation has 72 CPUs, while the third node has 36 CPUs. NOTE: The select/linear plugin allocates entire nodes to jobs, so the value indicates the total count of CPUs on allocated nodes. The select/cons_tres plugin allocates individual CPUs to jobs, so this number indicates the number of CPUs allocated to the job.
+SLURM_JOB_DEPENDENCY
+Set to value of the --dependency option.
+SLURM_JOB_END_TIME
+The UNIX timestamp for a job's projected end time.
+SLURM_JOB_GPUS
+The global GPU IDs of the GPUs allocated to this job. The GPU IDs are not relative to any device cgroup, even if devices are constrained with task/cgroup. Only set in batch and interactive jobs.
+SLURM_JOB_ID
+The ID of the job allocation.
+SLURM_JOB_LICENSES
+Name and count of any license(s) requested.
+SLURM_JOB_NAME
+Name of the job.
+SLURM_JOB_NODELIST
+List of nodes allocated to the job.
+SLURM_JOB_NUM_NODES
+Total number of nodes in the job's resource allocation.
+SLURM_JOB_PARTITION
+Name of the partition in which the job is running.
+SLURM_JOB_QOS
+Quality Of Service (QOS) of the job allocation.
+SLURM_JOB_RESERVATION
+Advanced reservation containing the job allocation, if any.
+SLURM_JOB_SEGMENT_SIZE
+The size of the segments that was used to create the job allocation. Only set if --segment is specified.
+SLURM_JOB_START_TIME
+The UNIX timestamp for a job's start time.
+SLURM_JOBID
+The ID of the job allocation. See SLURM_JOB_ID. Included for backwards compatibility.
+SLURM_LOCALID
+Node local task ID for the process within a job.
+SLURM_MEM_PER_CPU
+Same as --mem-per-cpu
+SLURM_MEM_PER_GPU
+Requested memory per allocated GPU. Only set if the --mem-per-gpu option is specified.
+SLURM_MEM_PER_NODE
+Same as --mem
+SLURM_NETWORK
+Set to the value of the --network option, if specified.
+SLURM_NNODES
+Total number of nodes in the job's resource allocation. See SLURM_JOB_NUM_NODES. Included for backwards compatibility.
+SLURM_NODEID
+ID of the nodes allocated.
+SLURM_NODELIST
+List of nodes allocated to the job. See SLURM_JOB_NODELIST. Included for backwards compatibility.
+SLURM_NPROCS
+Same as SLURM_NTASKS. Included for backwards compatibility.
+SLURM_NTASKS
+Set to value of the --ntasks option, if specified. Or, if any of the --ntasks-per-* options are specified, set to the number of tasks in the job.
+NOTE: This is also an input variable for srun, so if set it will effectively set the --ntasks option for srun when called from the batch script.
+SLURM_NTASKS_PER_CORE
+Number of tasks requested per core. Only set if the --ntasks-per-core option is specified.
+SLURM_NTASKS_PER_GPU
+Number of tasks requested per GPU. Only set if the --ntasks-per-gpu option is specified.
+SLURM_NTASKS_PER_NODE
+Number of tasks requested per node. Only set if the --ntasks-per-node option is specified.
+SLURM_NTASKS_PER_SOCKET
+Number of tasks requested per socket. Only set if the --ntasks-per-socket option is specified.
+SLURM_OOMKILLSTEP
+Same as --oom-kill-step
+SLURM_OVERCOMMIT
+Set to 1 if --overcommit was specified.
+SLURM_PRIO_PROCESS
+The scheduling priority (nice value) at the time of job submission. This value is propagated to the spawned processes.
+SLURM_PROCID
+The MPI rank (or relative process ID) of the current process
+SLURM_PROFILE
+Same as --profile
+SLURM_RESTART_COUNT
+If the job has been restarted due to system failure or has been explicitly requeued, this will be sent to the number of times the job has been restarted.
+SLURM_SHARDS_ON_NODE
+Number of GPU Shards available to the step on this node.
+SLURM_SUBMIT_DIR
+The directory from which sbatch was invoked.
+SLURM_SUBMIT_HOST
+The hostname of the computer from which sbatch was invoked.
+SLURM_TASK_PID
+The process ID of the task being started.
+SLURM_TASKS_PER_NODE
+Number of tasks to be initiated on each node. Values are comma separated and in the same order as SLURM_JOB_NODELIST. If two or more consecutive nodes are to have the same task count, that count is followed by "(x#)" where "#" is the repetition count. For example, "SLURM_TASKS_PER_NODE=2(x3),1" indicates that the first three nodes will each execute two tasks and the fourth node will execute one task.
+SLURM_THREADS_PER_CORE
+This is only set if --threads-per-core or SBATCH_THREADS_PER_CORE were specified. The value will be set to the value specified by --threads-per-core or SBATCH_THREADS_PER_CORE. This is used by subsequent srun calls within the job allocation.
+SLURM_TOPOLOGY_ADDR
+This is set only if the system has the topology/tree plugin configured. The value will be set to the names network switches which may be involved in the job's communications from the system's top level switch down to the leaf switch and ending with node name. A period is used to separate each hardware component name.
+SLURM_TOPOLOGY_ADDR_PATTERN
+This is set only if the system has the topology/tree plugin configured. The value will be set component types listed in SLURM_TOPOLOGY_ADDR. Each component will be identified as either "switch" or "node". A period is used to separate each hardware component type.
+SLURM_TRES_PER_TASK
+Set to the value of --tres-per-task. If --cpus-per-task or --gpus-per-task is specified, it is also set in SLURM_TRES_PER_TASK as if it were specified in --tres-per-task.
+SLURMD_NODENAME
+Name of the node running the job script.
